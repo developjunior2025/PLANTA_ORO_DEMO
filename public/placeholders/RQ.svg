@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Sin fotografía: Requisiciones">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1f45"/><stop offset="1" stop-color="#123063"/></linearGradient></defs>
+  <rect width="800" height="600" fill="url(#g)"/>
+  <rect x="24" y="24" width="752" height="552" rx="16" fill="none" stroke="#f5a623" stroke-opacity=".45" stroke-width="2" stroke-dasharray="10 8"/>
+  <text x="400" y="290" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="120" font-weight="800" fill="#f5a623">RQ</text>
+  <text x="400" y="350" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="30" fill="#ffffff">Requisiciones</text>
+  <text x="400" y="400" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="20" fill="#9fb3d6">Sin fotografía · imagen pendiente (AS-BUILT)</text>
+</svg>

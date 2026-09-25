@@ -1,0 +1,2311 @@
+[
+ {
+  "code": "FUR-DASH-PUB-001",
+  "route": "/planta/tiempo-real",
+  "slug": "tiempo-real",
+  "roleCode": "VIS",
+  "audience": "Visitantes, comunidad autorizada, stakeholders externos",
+  "refresh": "5–15 min",
+  "domain": "Público / Planta",
+  "objective": "Presentar información operacional autorizada de alto nivel sin exponer datos sensibles, tags OT, planos, costos ni información restringida.",
+  "sections": [
+   {
+    "id": "resumen-publico",
+    "title": "Resumen público"
+   },
+   {
+    "id": "produccion-autorizada",
+    "title": "Producción autorizada"
+   },
+   {
+    "id": "disponibilidad",
+    "title": "Disponibilidad"
+   },
+   {
+    "id": "seguridad-y-sostenibilidad",
+    "title": "Seguridad y sostenibilidad"
+   },
+   {
+    "id": "tendencia-24-h",
+    "title": "Tendencia 24 h"
+   },
+   {
+    "id": "mapa-publico",
+    "title": "Mapa público"
+   },
+   {
+    "id": "noticias-comunicados",
+    "title": "Noticias / comunicados"
+   },
+   {
+    "id": "metodologia-de-datos",
+    "title": "Metodología de datos"
+   }
+  ],
+  "kpis": [
+   "Producción autorizada del día (t/d)",
+   "Disponibilidad global de planta (%)",
+   "Horas operativas acumuladas",
+   "Estado general de operación",
+   "Indicador de seguridad publicable",
+   "Indicador ambiental/sostenibilidad publicable",
+   "Última actualización de datos"
+  ],
+  "visualizations": [
+   "Tarjetas KPI de estado.",
+   "Tendencia 24 h de producción autorizada.",
+   "Semáforo de disponibilidad.",
+   "Mapa simplificado de planta.",
+   "Timeline de hitos públicos."
+  ],
+  "sources": [
+   "FUR-PROC agregado",
+   "Odoo 19 solo datos publicables",
+   "Historian mediante capa de publicación",
+   "FUR-HSE/indicadores aprobados",
+   "CMS/Documentos públicos"
+  ],
+  "alerts": [
+   "Datos desactualizados.",
+   "Dashboard temporalmente no disponible.",
+   "Estado general fuera de servicio.",
+   "Aviso de mantenimiento del portal."
+  ],
+  "actions": [
+   "Ver mapa público.",
+   "Consultar metodología.",
+   "Abrir comunicado.",
+   "Ver catálogo público."
+  ],
+  "drilldown": "KPI público → contexto agregado → página informativa pública; nunca baja a tags, FUR internos o documentos restringidos."
+ },
+ {
+  "code": "FUR-DASH-EXE-001",
+  "route": "/app/dashboards/ejecutivo",
+  "slug": "ejecutivo",
+  "roleCode": "DIR",
+  "audience": "Gerencia General / Dirección",
+  "refresh": "15–60 min",
+  "domain": "Corporativo",
+  "objective": "Concentrar desempeño estratégico, operativo, financiero, de riesgo y sostenibilidad para toma de decisiones de dirección.",
+  "sections": [
+   {
+    "id": "resumen-ejecutivo",
+    "title": "Resumen ejecutivo"
+   },
+   {
+    "id": "produccion-y-recuperacion",
+    "title": "Producción y recuperación"
+   },
+   {
+    "id": "disponibilidad-y-confiabilidad",
+    "title": "Disponibilidad y confiabilidad"
+   },
+   {
+    "id": "costos-capex-opex",
+    "title": "Costos CAPEX/OPEX"
+   },
+   {
+    "id": "energia-y-consumos",
+    "title": "Energía y consumos"
+   },
+   {
+    "id": "seguridad-hse",
+    "title": "Seguridad / HSE"
+   },
+   {
+    "id": "calidad-y-laboratorio",
+    "title": "Calidad y laboratorio"
+   },
+   {
+    "id": "abastecimiento",
+    "title": "Abastecimiento"
+   },
+   {
+    "id": "proyectos-y-moc",
+    "title": "Proyectos y MOC"
+   },
+   {
+    "id": "madurez-fur-gobierno",
+    "title": "Madurez FUR / gobierno"
+   },
+   {
+    "id": "comparativos-por-periodo",
+    "title": "Comparativos por período"
+   },
+   {
+    "id": "reportes-ejecutivos",
+    "title": "Reportes ejecutivos"
+   }
+  ],
+  "kpis": [
+   "Producción diaria/mensual",
+   "Recuperación metalúrgica Au (%)",
+   "Disponibilidad física (%)",
+   "OEE global (%)",
+   "Costo operativo por tonelada",
+   "Consumo específico de energía (kWh/t)",
+   "CAPEX comprometido vs presupuesto",
+   "OPEX real vs presupuesto",
+   "Backlog crítico de mantenimiento",
+   "Incidentes HSE",
+   "Cumplimiento de producción",
+   "Madurez D4/D5 de FUR",
+   "TBC/HOLD críticos abiertos"
+  ],
+  "visualizations": [
+   "Scorecards ejecutivos.",
+   "Tendencia producción/recuperación.",
+   "Waterfall de costos.",
+   "Curva S CAPEX/OPEX.",
+   "Pareto de pérdidas.",
+   "Heatmap por etapa D01–D18.",
+   "Matriz riesgo-impacto.",
+   "Semáforo de madurez FUR."
+  ],
+  "sources": [
+   "FUR-PROC",
+   "FUR-MNT",
+   "FUR-PTE",
+   "FUR-CC/FUR-LAB",
+   "Odoo Accounting/Analytic",
+   "Odoo Purchase",
+   "LuloWin/motor presupuesto",
+   "HSE",
+   "SCADA/Historian agregados"
+  ],
+  "alerts": [
+   "Desviación producción > límite aprobado.",
+   "Recuperación bajo objetivo.",
+   "Sobrepresupuesto.",
+   "Disponibilidad bajo mínimo.",
+   "Evento HSE mayor.",
+   "Backlog crítico creciente.",
+   "TBC/HOLD vencido."
+  ],
+  "actions": [
+   "Abrir dashboard de planta.",
+   "Abrir detalle de costos.",
+   "Abrir etapa crítica.",
+   "Abrir evidencia FUR.",
+   "Exportar reporte ejecutivo.",
+   "Crear tarea/seguimiento."
+  ],
+  "drilldown": "Corporativo → planta → área → etapa → KPI → activo/FUR → evidencia/documento/evento."
+ },
+ {
+  "code": "FUR-DASH-GPL-001",
+  "route": "/app/dashboards/planta",
+  "slug": "planta",
+  "roleCode": "GPL",
+  "audience": "Gerente de Planta, superintendencias",
+  "refresh": "1–5 min",
+  "domain": "Operaciones",
+  "objective": "Supervisar operación integral de la planta por etapa, turno, activo crítico y evento operativo.",
+  "sections": [
+   {
+    "id": "resumen-de-turno",
+    "title": "Resumen de turno"
+   },
+   {
+    "id": "cadena-productiva-d01d18",
+    "title": "Cadena productiva D01–D18"
+   },
+   {
+    "id": "produccion",
+    "title": "Producción"
+   },
+   {
+    "id": "recuperacion",
+    "title": "Recuperación"
+   },
+   {
+    "id": "disponibilidad",
+    "title": "Disponibilidad"
+   },
+   {
+    "id": "alarmas-y-eventos",
+    "title": "Alarmas y eventos"
+   },
+   {
+    "id": "activos-criticos",
+    "title": "Activos críticos"
+   },
+   {
+    "id": "mantenimiento",
+    "title": "Mantenimiento"
+   },
+   {
+    "id": "potencia",
+    "title": "Potencia"
+   },
+   {
+    "id": "calidad-laboratorio",
+    "title": "Calidad/Laboratorio"
+   },
+   {
+    "id": "inventario-critico",
+    "title": "Inventario crítico"
+   },
+   {
+    "id": "personal-turnos",
+    "title": "Personal/turnos"
+   },
+   {
+    "id": "mapa-operativo",
+    "title": "Mapa operativo"
+   },
+   {
+    "id": "reporte-de-turno",
+    "title": "Reporte de turno"
+   }
+  ],
+  "kpis": [
+   "t/h y t/d procesadas",
+   "Producción de oro equivalente",
+   "Recuperación Au",
+   "Disponibilidad física",
+   "OEE",
+   "Paradas no programadas",
+   "Alarmas activas por severidad",
+   "Activos críticos fuera de servicio",
+   "Backlog mantenimiento crítico",
+   "Stock crítico sin disponibilidad",
+   "Consumo de energía por tonelada"
+  ],
+  "visualizations": [
+   "Mímico de las 18 etapas.",
+   "Tendencia de producción por turno.",
+   "Pareto de pérdidas de producción.",
+   "Gantt de paradas.",
+   "Mapa de alarmas.",
+   "Heatmap de disponibilidad por etapa.",
+   "Tabla de activos críticos."
+  ],
+  "sources": [
+   "SCADA/Historian",
+   "FUR-PROC",
+   "FUR-MNT",
+   "FUR-PTE",
+   "FUR-IOT",
+   "FUR-WMS",
+   "FUR-CC/LAB",
+   "Odoo Maintenance/Stock"
+  ],
+  "alerts": [
+   "Parada de etapa.",
+   "Activo crítico detenido.",
+   "Alarma alta/alta-alta.",
+   "Pérdida de comunicaciones.",
+   "Stockout de repuesto crítico.",
+   "Desviación metalúrgica.",
+   "Evento HSE."
+  ],
+  "actions": [
+   "Reconocer evento contextual.",
+   "Abrir FUR del activo.",
+   "Abrir OT relacionada.",
+   "Solicitar repuesto.",
+   "Abrir tendencia.",
+   "Crear comentario de turno.",
+   "Exportar reporte."
+  ],
+  "drilldown": "Planta → etapa Dxx → sistema → activo → variable/evento → OT/documento/evidencia."
+ },
+ {
+  "code": "FUR-DASH-MET-001",
+  "route": "/app/dashboards/procesos",
+  "slug": "procesos",
+  "roleCode": "MET",
+  "audience": "Metalurgistas, ingeniería de procesos, gerente de planta",
+  "refresh": "1–5 min",
+  "domain": "FUR-PROC / Metalurgia",
+  "objective": "Monitorear desempeño metalúrgico, balance, variables críticas, correlaciones entre instrumentos, muestras y resultados de laboratorio.",
+  "sections": [
+   {
+    "id": "resumen-metalurgico",
+    "title": "Resumen metalúrgico"
+   },
+   {
+    "id": "alimentacion",
+    "title": "Alimentación"
+   },
+   {
+    "id": "molienda",
+    "title": "Molienda"
+   },
+   {
+    "id": "clasificacion",
+    "title": "Clasificación"
+   },
+   {
+    "id": "pre-lixiviacion",
+    "title": "Pre-lixiviación"
+   },
+   {
+    "id": "lixiviacion-cil",
+    "title": "Lixiviación/CIL"
+   },
+   {
+    "id": "adsorcion-cip",
+    "title": "Adsorción CIP"
+   },
+   {
+    "id": "desorcion-elucion",
+    "title": "Desorción/Elución"
+   },
+   {
+    "id": "electrowinning",
+    "title": "Electrowinning"
+   },
+   {
+    "id": "fundicion",
+    "title": "Fundición"
+   },
+   {
+    "id": "relaves",
+    "title": "Relaves"
+   },
+   {
+    "id": "balance-metalurgico",
+    "title": "Balance metalúrgico"
+   },
+   {
+    "id": "correlacion-iotcclab",
+    "title": "Correlación IoT–CC–LAB"
+   },
+   {
+    "id": "ensayos-y-campanas",
+    "title": "Ensayos y campañas"
+   },
+   {
+    "id": "kpis-por-etapa",
+    "title": "KPIs por etapa"
+   }
+  ],
+  "kpis": [
+   "Throughput t/h",
+   "P80 alimentación/producto",
+   "% sólidos",
+   "pH",
+   "ORP",
+   "NaCN libre",
+   "Oxígeno disuelto",
+   "Densidad de pulpa",
+   "Au alimentación",
+   "Au solución",
+   "Au carbón",
+   "Recuperación global",
+   "Inventario de oro en proceso",
+   "Consumo reactivo específico"
+  ],
+  "visualizations": [
+   "Tendencias multivariable.",
+   "Balance Sankey conceptual.",
+   "Correlación IoT vs laboratorio.",
+   "Control charts.",
+   "Boxplots por turno.",
+   "Heatmap por tanque CIL/CIP.",
+   "Perfil granulométrico.",
+   "Curvas de recuperación."
+  ],
+  "sources": [
+   "FUR-PROC",
+   "FUR-IOT",
+   "FUR-CC",
+   "FUR-LAB",
+   "SCADA/Historian",
+   "Odoo Quality",
+   "Documentos/SOP"
+  ],
+  "alerts": [
+   "pH fuera de banda.",
+   "ORP fuera de banda.",
+   "NaCN bajo/alto.",
+   "DO bajo.",
+   "P80 fuera de especificación.",
+   "Diferencia IoT vs LAB sobre tolerancia aprobada.",
+   "Muestra crítica pendiente."
+  ],
+  "actions": [
+   "Abrir proceso/FUR.",
+   "Abrir instrumento.",
+   "Abrir muestra.",
+   "Abrir resultado LAB.",
+   "Comparar períodos.",
+   "Crear campaña de análisis.",
+   "Añadir observación técnica."
+  ],
+  "drilldown": "Etapa → variable → instrumento/tag → muestra relacionada → análisis LAB → documento/método → decisión/acción."
+ },
+ {
+  "code": "FUR-DASH-OPR-001",
+  "route": "/app/dashboards/operacion",
+  "slug": "operacion",
+  "roleCode": "OPR",
+  "audience": "Operadores de sala de control y terreno",
+  "refresh": "5–30 s",
+  "domain": "Operación",
+  "objective": "Dar visibilidad operacional de variables y estado sin sustituir al sistema SCADA de control; el dashboard es supervisión y contexto.",
+  "sections": [
+   {
+    "id": "vista-de-turno",
+    "title": "Vista de turno"
+   },
+   {
+    "id": "resumen-de-proceso",
+    "title": "Resumen de proceso"
+   },
+   {
+    "id": "variables-criticas",
+    "title": "Variables críticas"
+   },
+   {
+    "id": "alarmas",
+    "title": "Alarmas"
+   },
+   {
+    "id": "equipos",
+    "title": "Equipos"
+   },
+   {
+    "id": "interlocks-informativos",
+    "title": "Interlocks informativos"
+   },
+   {
+    "id": "rondas-inspecciones",
+    "title": "Rondas/inspecciones"
+   },
+   {
+    "id": "eventos-de-turno",
+    "title": "Eventos de turno"
+   },
+   {
+    "id": "consignas-autorizadas",
+    "title": "Consignas autorizadas"
+   },
+   {
+    "id": "documentos-sop",
+    "title": "Documentos SOP"
+   },
+   {
+    "id": "handover-de-turno",
+    "title": "Handover de turno"
+   }
+  ],
+  "kpis": [
+   "Producción turno",
+   "Equipos en marcha/parados",
+   "Alarmas activas",
+   "Variables fuera de rango",
+   "Disponibilidad por área",
+   "Consumo de agua/energía autorizado",
+   "Rondas completadas",
+   "Eventos pendientes de cierre"
+  ],
+  "visualizations": [
+   "Mímico simplificado.",
+   "Trend de variables.",
+   "Lista de alarmas.",
+   "Estado de equipos.",
+   "Panel de rondas.",
+   "Timeline de eventos."
+  ],
+  "sources": [
+   "SCADA/Historian",
+   "FUR-PROC",
+   "FUR-IOT",
+   "FUR-MNT",
+   "Odoo Maintenance",
+   "SOP/Documentos"
+  ],
+  "alerts": [
+   "HH/H/L/LL de variable.",
+   "Equipo detenido.",
+   "Interlock activo.",
+   "Pérdida de señal.",
+   "Ronda vencida.",
+   "Evento no reconocido."
+  ],
+  "actions": [
+   "Abrir tendencia.",
+   "Abrir SOP.",
+   "Registrar evento.",
+   "Crear solicitud de mantenimiento.",
+   "Abrir FUR.",
+   "Iniciar ronda."
+  ],
+  "drilldown": "Turno → área → equipo → variable → tendencia → FUR/SOP/evento. No ejecutar control directo desde el dashboard salvo futura autorización formal."
+ },
+ {
+  "code": "FUR-DASH-PTE-001",
+  "route": "/app/dashboards/potencia",
+  "slug": "potencia",
+  "roleCode": "ELE",
+  "audience": "Ingeniería eléctrica, mantenimiento eléctrico, gerencia de planta",
+  "refresh": "5–30 s",
+  "domain": "FUR-PTE",
+  "objective": "Supervisar red eléctrica, cargas, protecciones, calidad de energía, disponibilidad de subestaciones, MCC, VFD y motores.",
+  "sections": [
+   {
+    "id": "resumen-electrico",
+    "title": "Resumen eléctrico"
+   },
+   {
+    "id": "diagrama-unifilar",
+    "title": "Diagrama unifilar"
+   },
+   {
+    "id": "subestaciones",
+    "title": "Subestaciones"
+   },
+   {
+    "id": "transformadores",
+    "title": "Transformadores"
+   },
+   {
+    "id": "switchgear-celdas",
+    "title": "Switchgear/celdas"
+   },
+   {
+    "id": "mcc",
+    "title": "MCC"
+   },
+   {
+    "id": "motores",
+    "title": "Motores"
+   },
+   {
+    "id": "vfd-arrancadores",
+    "title": "VFD/arrancadores"
+   },
+   {
+    "id": "protecciones",
+    "title": "Protecciones"
+   },
+   {
+    "id": "medicion-y-energia",
+    "title": "Medición y energía"
+   },
+   {
+    "id": "calidad-de-energia",
+    "title": "Calidad de energía"
+   },
+   {
+    "id": "eventos-trips",
+    "title": "Eventos/trips"
+   },
+   {
+    "id": "mantenimiento-electrico",
+    "title": "Mantenimiento eléctrico"
+   },
+   {
+    "id": "pruebas-y-documentos",
+    "title": "Pruebas y documentos"
+   }
+  ],
+  "kpis": [
+   "Demanda kW/kVA",
+   "Demanda máxima",
+   "Factor de potencia",
+   "Corriente por alimentador",
+   "Tensión por barra",
+   "Frecuencia",
+   "THD V/I",
+   "Número de trips",
+   "Disponibilidad MCC/VFD",
+   "Carga de transformadores (%)",
+   "Consumo kWh/t",
+   "Temperatura de activos monitoreados"
+  ],
+  "visualizations": [
+   "Unifilar resumido interactivo.",
+   "Trend V/I/kW/PF.",
+   "Heatmap carga de transformadores.",
+   "Pareto de trips.",
+   "Tabla de protecciones activadas.",
+   "Perfil de demanda.",
+   "Indicadores de calidad de energía."
+  ],
+  "sources": [
+   "FUR-PTE",
+   "IED/relés",
+   "Medidores de energía",
+   "SCADA/Historian",
+   "FUR-IOT",
+   "FUR-MNT",
+   "Odoo Maintenance"
+  ],
+  "alerts": [
+   "Sobrecarga.",
+   "Sub/sobretensión.",
+   "Bajo factor de potencia.",
+   "THD alto.",
+   "Trip de protección.",
+   "MCC/VFD indisponible.",
+   "Temperatura alta.",
+   "Pérdida de medición."
+  ],
+  "actions": [
+   "Abrir unifilar.",
+   "Abrir FUR-PTE.",
+   "Abrir evento/trip.",
+   "Abrir tendencia.",
+   "Crear OT.",
+   "Abrir curva/configuración documental.",
+   "Exportar reporte."
+  ],
+  "drilldown": "Planta → subestación → barra/alimentador → equipo → protección/medición → evento → OT/documento."
+ },
+ {
+  "code": "FUR-DASH-IOT-001",
+  "route": "/app/dashboards/iot",
+  "slug": "iot",
+  "roleCode": "IOT",
+  "audience": "Instrumentistas, automatización, OT, ingeniería",
+  "refresh": "10–60 s",
+  "domain": "FUR-IOT",
+  "objective": "Gestionar salud, conectividad, metrología y trazabilidad de instrumentos, tags, gateways, PLC/RTU y series temporales.",
+  "sections": [
+   {
+    "id": "resumen-ot",
+    "title": "Resumen OT"
+   },
+   {
+    "id": "instrumentos",
+    "title": "Instrumentos"
+   },
+   {
+    "id": "variables",
+    "title": "Variables"
+   },
+   {
+    "id": "tags",
+    "title": "Tags"
+   },
+   {
+    "id": "plc-rtu-rio",
+    "title": "PLC/RTU/RIO"
+   },
+   {
+    "id": "gateways-edge",
+    "title": "Gateways/Edge"
+   },
+   {
+    "id": "scada",
+    "title": "SCADA"
+   },
+   {
+    "id": "historian",
+    "title": "Historian"
+   },
+   {
+    "id": "calibraciones",
+    "title": "Calibraciones"
+   },
+   {
+    "id": "alarmas-de-instrumento",
+    "title": "Alarmas de instrumento"
+   },
+   {
+    "id": "calidad-de-senal",
+    "title": "Calidad de señal"
+   },
+   {
+    "id": "latencia-comunicaciones",
+    "title": "Latencia/comunicaciones"
+   },
+   {
+    "id": "firmware-configuracion",
+    "title": "Firmware/configuración"
+   },
+   {
+    "id": "ciberseguridad-ot",
+    "title": "Ciberseguridad OT"
+   },
+   {
+    "id": "documentacion",
+    "title": "Documentación"
+   }
+  ],
+  "kpis": [
+   "Instrumentos online (%)",
+   "Tags Good (%)",
+   "Tags Bad/Uncertain",
+   "Instrumentos con calibración vencida",
+   "Instrumentos críticos offline",
+   "Latencia media",
+   "Gateways online",
+   "PLC/RIO health",
+   "Tasa de pérdida de datos",
+   "Disponibilidad historian",
+   "Pendientes de metrología"
+  ],
+  "visualizations": [
+   "Health matrix por área.",
+   "Heatmap de calidad de señal.",
+   "Trend de latencia.",
+   "Timeline de desconexiones.",
+   "Calendario de calibraciones.",
+   "Top instrumentos con fallas.",
+   "Matriz instrumento→PLC→SCADA→Historian."
+  ],
+  "sources": [
+   "FUR-IOT",
+   "SCADA",
+   "Historian",
+   "PLC/RTU/RIO",
+   "Gateways",
+   "Odoo Maintenance",
+   "Documentos/calibración"
+  ],
+  "alerts": [
+   "Tag Bad/Uncertain.",
+   "Instrumento offline.",
+   "Calibración vencida.",
+   "Latencia alta.",
+   "PLC/gateway indisponible.",
+   "Pérdida de historian.",
+   "Cambio no autorizado de configuración."
+  ],
+  "actions": [
+   "Abrir FUR-IOT.",
+   "Abrir tendencia.",
+   "Abrir calibración.",
+   "Crear OT.",
+   "Ver cadena digital.",
+   "Abrir documento.",
+   "Comparar último valor vs laboratorio cuando aplique."
+  ],
+  "drilldown": "Área → instrumento → variable/tag → canal PLC → objeto SCADA → serie Historian → calibración/evento."
+ },
+ {
+  "code": "FUR-DASH-GPON-001",
+  "route": "/app/dashboards/gpon",
+  "slug": "gpon",
+  "roleCode": "GPN",
+  "audience": "Telecomunicaciones, OT, infraestructura",
+  "refresh": "30–60 s",
+  "domain": "FUR-GPON",
+  "objective": "Supervisar topología óptica, OLT/ODN/ONU, potencia óptica, servicios, VLAN y disponibilidad de comunicaciones.",
+  "sections": [
+   {
+    "id": "resumen-gpon",
+    "title": "Resumen GPON"
+   },
+   {
+    "id": "topologia",
+    "title": "Topología"
+   },
+   {
+    "id": "olt",
+    "title": "OLT"
+   },
+   {
+    "id": "puertos-pon",
+    "title": "Puertos PON"
+   },
+   {
+    "id": "odf-odn",
+    "title": "ODF/ODN"
+   },
+   {
+    "id": "splitters",
+    "title": "Splitters"
+   },
+   {
+    "id": "fibra-backbone",
+    "title": "Fibra/Backbone"
+   },
+   {
+    "id": "empalmes-cierres",
+    "title": "Empalmes/cierres"
+   },
+   {
+    "id": "onu-ont",
+    "title": "ONU/ONT"
+   },
+   {
+    "id": "switches-uplinks",
+    "title": "Switches/uplinks"
+   },
+   {
+    "id": "potencia-optica",
+    "title": "Potencia óptica"
+   },
+   {
+    "id": "servicios-vlan",
+    "title": "Servicios/VLAN"
+   },
+   {
+    "id": "otdr",
+    "title": "OTDR"
+   },
+   {
+    "id": "alarmas",
+    "title": "Alarmas"
+   },
+   {
+    "id": "inventario-telecom",
+    "title": "Inventario telecom"
+   },
+   {
+    "id": "mantenimiento",
+    "title": "Mantenimiento"
+   }
+  ],
+  "kpis": [
+   "ONU online (%)",
+   "OLT/PON disponibles",
+   "Rx/Tx óptico",
+   "Pérdida óptica estimada/medida",
+   "Margen óptico",
+   "Puertos ocupados (%)",
+   "Servicios afectados",
+   "Latencia/jitter cuando aplique",
+   "OTDR pendientes",
+   "Incidencias abiertas"
+  ],
+  "visualizations": [
+   "Topología lógica/física.",
+   "Heatmap de potencia óptica.",
+   "Mapa de fibra.",
+   "Tabla OLT→PON→ONU.",
+   "Trend Rx/Tx.",
+   "Timeline de alarmas.",
+   "Capacidad de puertos."
+  ],
+  "sources": [
+   "FUR-GPON",
+   "NMS OLT/ONU",
+   "Pruebas OTDR/power meter",
+   "GIS/mapa",
+   "FUR-CAM/FUR-IOT relaciones",
+   "Odoo Maintenance"
+  ],
+  "alerts": [
+   "ONU offline.",
+   "PON down.",
+   "Rx bajo.",
+   "Margen óptico crítico.",
+   "Uplink down.",
+   "Servicio afectado.",
+   "OTDR fuera de criterio."
+  ],
+  "actions": [
+   "Abrir topología.",
+   "Abrir FUR-GPON.",
+   "Abrir servicio afectado.",
+   "Crear OT.",
+   "Ver ruta de fibra.",
+   "Adjuntar OTDR.",
+   "Abrir activo dependiente."
+  ],
+  "drilldown": "OLT → tarjeta → PON → splitter → fibra → ONU/ONT → servicio → activo FUR consumidor."
+ },
+ {
+  "code": "FUR-DASH-CC-001",
+  "route": "/app/dashboards/calidad",
+  "slug": "calidad",
+  "roleCode": "LAB",
+  "audience": "QA/QC, metalurgia, laboratorio",
+  "refresh": "5–15 min",
+  "domain": "FUR-CC",
+  "objective": "Controlar muestreo físico, cadena de custodia, cumplimiento del plan de muestreo y calidad de las muestras.",
+  "sections": [
+   {
+    "id": "resumen-qa-qc",
+    "title": "Resumen QA/QC"
+   },
+   {
+    "id": "plan-de-muestreo",
+    "title": "Plan de muestreo"
+   },
+   {
+    "id": "puntos-de-muestreo",
+    "title": "Puntos de muestreo"
+   },
+   {
+    "id": "muestras-tomadas",
+    "title": "Muestras tomadas"
+   },
+   {
+    "id": "muestras-pendientes",
+    "title": "Muestras pendientes"
+   },
+   {
+    "id": "cadena-de-custodia",
+    "title": "Cadena de custodia"
+   },
+   {
+    "id": "preparacion",
+    "title": "Preparación"
+   },
+   {
+    "id": "solicitudes-al-laboratorio",
+    "title": "Solicitudes al laboratorio"
+   },
+   {
+    "id": "blancos",
+    "title": "Blancos"
+   },
+   {
+    "id": "duplicados",
+    "title": "Duplicados"
+   },
+   {
+    "id": "materiales-de-referencia",
+    "title": "Materiales de referencia"
+   },
+   {
+    "id": "no-conformidades",
+    "title": "No conformidades"
+   },
+   {
+    "id": "trazabilidad-por-etapa",
+    "title": "Trazabilidad por etapa"
+   },
+   {
+    "id": "documentos",
+    "title": "Documentos"
+   }
+  ],
+  "kpis": [
+   "Muestras planificadas vs tomadas",
+   "Muestras pendientes de recepción",
+   "Cadena de custodia abierta",
+   "Muestras fuera de tiempo",
+   "Controles QA/QC ejecutados",
+   "Duplicados/blancos/CRM por lote",
+   "No conformidades",
+   "Tiempo toma→recepción",
+   "Cobertura del plan de muestreo"
+  ],
+  "visualizations": [
+   "Pipeline de muestras.",
+   "Heatmap puntos de muestreo.",
+   "Pareto no conformidades.",
+   "Timeline de custodia.",
+   "Calendario de muestreo.",
+   "Matriz muestra→solicitud→resultado."
+  ],
+  "sources": [
+   "FUR-CC",
+   "FUR-PROC",
+   "FUR-IOT",
+   "FUR-LAB",
+   "Odoo Quality",
+   "Documentos/SOP"
+  ],
+  "alerts": [
+   "Muestra vencida.",
+   "Cadena incompleta.",
+   "Muestra sin punto válido.",
+   "Control QA/QC faltante.",
+   "Recepción tardía.",
+   "No conformidad abierta."
+  ],
+  "actions": [
+   "Registrar muestra.",
+   "Abrir cadena de custodia.",
+   "Crear solicitud LAB.",
+   "Abrir resultado vinculado.",
+   "Registrar no conformidad.",
+   "Imprimir etiqueta/QR."
+  ],
+  "drilldown": "Etapa → punto → muestra → custodia → preparación → solicitud → análisis LAB."
+ },
+ {
+  "code": "FUR-DASH-LAB-001",
+  "route": "/app/dashboards/laboratorio",
+  "slug": "laboratorio",
+  "roleCode": "LAB",
+  "audience": "Laboratorio, QA/QC, metalurgia",
+  "refresh": "5–15 min",
+  "domain": "FUR-LAB",
+  "objective": "Gestionar carga de trabajo, métodos, corridas, equipos, resultados, QA/QC y certificación analítica.",
+  "sections": [
+   {
+    "id": "resumen-laboratorio",
+    "title": "Resumen laboratorio"
+   },
+   {
+    "id": "recepcion",
+    "title": "Recepción"
+   },
+   {
+    "id": "cola-de-muestras",
+    "title": "Cola de muestras"
+   },
+   {
+    "id": "preparacion",
+    "title": "Preparación"
+   },
+   {
+    "id": "metodos-sop",
+    "title": "Métodos/SOP"
+   },
+   {
+    "id": "equipos",
+    "title": "Equipos"
+   },
+   {
+    "id": "calibraciones",
+    "title": "Calibraciones"
+   },
+   {
+    "id": "corridas",
+    "title": "Corridas"
+   },
+   {
+    "id": "resultados",
+    "title": "Resultados"
+   },
+   {
+    "id": "qa-qc",
+    "title": "QA/QC"
+   },
+   {
+    "id": "validacion",
+    "title": "Validación"
+   },
+   {
+    "id": "certificados",
+    "title": "Certificados"
+   },
+   {
+    "id": "tat",
+    "title": "TAT"
+   },
+   {
+    "id": "no-conformidades",
+    "title": "No conformidades"
+   },
+   {
+    "id": "capacidad-del-laboratorio",
+    "title": "Capacidad del laboratorio"
+   }
+  ],
+  "kpis": [
+   "Muestras en cola",
+   "TAT promedio/mediana",
+   "Muestras vencidas",
+   "Corridas abiertas",
+   "Equipos disponibles",
+   "Calibraciones vigentes",
+   "QA/QC aceptación",
+   "Resultados fuera de control",
+   "Certificados pendientes",
+   "Capacidad utilizada"
+  ],
+  "visualizations": [
+   "Cola por prioridad.",
+   "Control charts QA/QC.",
+   "Histograma TAT.",
+   "Calendario de equipos.",
+   "Pareto de repeticiones.",
+   "Trend resultados.",
+   "Matriz equipo→método→corrida."
+  ],
+  "sources": [
+   "FUR-LAB",
+   "FUR-CC",
+   "Odoo Quality",
+   "Equipos de laboratorio",
+   "Documentos/SOP",
+   "FUR-MNT"
+  ],
+  "alerts": [
+   "TAT excedido.",
+   "Equipo fuera de calibración.",
+   "Control QA/QC rechazado.",
+   "Resultado pendiente de revisión.",
+   "Certificado vencido.",
+   "Muestra sin preparación."
+  ],
+  "actions": [
+   "Asignar muestra.",
+   "Abrir corrida.",
+   "Registrar/revisar resultado.",
+   "Aprobar certificado según rol.",
+   "Crear OT de equipo.",
+   "Abrir muestra origen."
+  ],
+  "drilldown": "Muestra → método → equipo → corrida → resultado → QA/QC → validación → certificado."
+ },
+ {
+  "code": "FUR-DASH-MNT-001",
+  "route": "/app/dashboards/mantenimiento",
+  "slug": "mantenimiento",
+  "roleCode": "MEC",
+  "audience": "Mantenimiento mecánico/eléctrico/OT, gerencia",
+  "refresh": "5–15 min",
+  "domain": "FUR-MNT",
+  "objective": "Gestionar condición, estrategia, planes, órdenes, fallas, repuestos, confiabilidad y backlog de activos.",
+  "sections": [
+   {
+    "id": "resumen-mantenimiento",
+    "title": "Resumen mantenimiento"
+   },
+   {
+    "id": "activos-criticos",
+    "title": "Activos críticos"
+   },
+   {
+    "id": "plan-preventivo",
+    "title": "Plan preventivo"
+   },
+   {
+    "id": "predictivo-condicion",
+    "title": "Predictivo/condición"
+   },
+   {
+    "id": "correctivo",
+    "title": "Correctivo"
+   },
+   {
+    "id": "ordenes-de-trabajo",
+    "title": "Órdenes de trabajo"
+   },
+   {
+    "id": "backlog",
+    "title": "Backlog"
+   },
+   {
+    "id": "inspecciones",
+    "title": "Inspecciones"
+   },
+   {
+    "id": "lubricacion",
+    "title": "Lubricación"
+   },
+   {
+    "id": "fallas",
+    "title": "Fallas"
+   },
+   {
+    "id": "rcm-criticidad",
+    "title": "RCM/criticidad"
+   },
+   {
+    "id": "mtbf-mttr",
+    "title": "MTBF/MTTR"
+   },
+   {
+    "id": "repuestos-bom",
+    "title": "Repuestos/BOM"
+   },
+   {
+    "id": "paradas-mayores",
+    "title": "Paradas mayores"
+   },
+   {
+    "id": "recursos",
+    "title": "Recursos"
+   },
+   {
+    "id": "costos",
+    "title": "Costos"
+   },
+   {
+    "id": "historial",
+    "title": "Historial"
+   }
+  ],
+  "kpis": [
+   "Disponibilidad",
+   "MTBF",
+   "MTTR",
+   "Cumplimiento PM",
+   "Backlog total/crítico",
+   "OT vencidas",
+   "Horas de parada",
+   "Costo mantenimiento",
+   "Reincidencia de fallas",
+   "Cobertura predictiva",
+   "Repuestos críticos disponibles"
+  ],
+  "visualizations": [
+   "Pareto de fallas.",
+   "Gantt de mantenimiento.",
+   "Backlog aging.",
+   "Trend MTBF/MTTR.",
+   "Matriz criticidad.",
+   "Mapa de condición.",
+   "Curva costo vs disponibilidad."
+  ],
+  "sources": [
+   "FUR-MNT",
+   "maintenance.equipment",
+   "maintenance.request",
+   "FUR-IOT",
+   "FUR-PTE",
+   "WMS/stock",
+   "Purchase/Odoo",
+   "Documentos"
+  ],
+  "alerts": [
+   "OT crítica vencida.",
+   "Falla repetitiva.",
+   "Condición predictiva crítica.",
+   "Repuesto crítico no disponible.",
+   "Activo crítico indisponible.",
+   "PM vencido."
+  ],
+  "actions": [
+   "Crear/abrir OT.",
+   "Reservar repuesto.",
+   "Abrir BOM.",
+   "Abrir FUR activo.",
+   "Programar inspección.",
+   "Registrar falla.",
+   "Abrir tendencia de condición."
+  ],
+  "drilldown": "Activo → estrategia → plan → OT → falla/condición → BOM → stock → compra."
+ },
+ {
+  "code": "FUR-DASH-WMS-001",
+  "route": "/app/dashboards/wms",
+  "slug": "wms",
+  "roleCode": "WMS",
+  "audience": "Almacén, logística, mantenimiento, compras",
+  "refresh": "5–15 min",
+  "domain": "WMS / Inventario",
+  "objective": "Controlar inventario, ubicaciones, lotes/series, movimientos, reservas, stock crítico y trazabilidad de repuestos.",
+  "sections": [
+   {
+    "id": "resumen-inventario",
+    "title": "Resumen inventario"
+   },
+   {
+    "id": "almacenes",
+    "title": "Almacenes"
+   },
+   {
+    "id": "ubicaciones",
+    "title": "Ubicaciones"
+   },
+   {
+    "id": "stock",
+    "title": "Stock"
+   },
+   {
+    "id": "repuestos-criticos",
+    "title": "Repuestos críticos"
+   },
+   {
+    "id": "lotes-series",
+    "title": "Lotes/series"
+   },
+   {
+    "id": "recepciones",
+    "title": "Recepciones"
+   },
+   {
+    "id": "despachos",
+    "title": "Despachos"
+   },
+   {
+    "id": "transferencias",
+    "title": "Transferencias"
+   },
+   {
+    "id": "reservas",
+    "title": "Reservas"
+   },
+   {
+    "id": "inventario-ciclico",
+    "title": "Inventario cíclico"
+   },
+   {
+    "id": "rfid-codigos",
+    "title": "RFID/códigos"
+   },
+   {
+    "id": "movimientos-recientes",
+    "title": "Movimientos recientes"
+   },
+   {
+    "id": "exactitud",
+    "title": "Exactitud"
+   },
+   {
+    "id": "aging-obsolescencia",
+    "title": "Aging/obsolescencia"
+   },
+   {
+    "id": "demandas-mantenimiento",
+    "title": "Demandas mantenimiento"
+   }
+  ],
+  "kpis": [
+   "Valor de inventario",
+   "Stock crítico disponible",
+   "Stockouts",
+   "Exactitud inventario",
+   "Rotación",
+   "Días de inventario",
+   "Reservas pendientes",
+   "Recepciones pendientes",
+   "Despachos pendientes",
+   "Ítems obsoletos",
+   "Fill rate mantenimiento"
+  ],
+  "visualizations": [
+   "ABC/XYZ.",
+   "Aging de inventario.",
+   "Mapa de almacén.",
+   "Trend entradas/salidas.",
+   "Pareto stockouts.",
+   "Heatmap de ubicaciones.",
+   "Demanda vs stock."
+  ],
+  "sources": [
+   "stock.quant",
+   "stock.location",
+   "stock.move",
+   "stock.move.line",
+   "stock.picking",
+   "product.product",
+   "FUR-MNT",
+   "purchase.order"
+  ],
+  "alerts": [
+   "Stock crítico bajo mínimo.",
+   "Stockout.",
+   "Lote vencido.",
+   "Recepción atrasada.",
+   "Reserva sin stock.",
+   "Diferencia de conteo."
+  ],
+  "actions": [
+   "Abrir ítem.",
+   "Reservar.",
+   "Crear solicitud de compra.",
+   "Abrir ubicación.",
+   "Ver movimientos.",
+   "Iniciar conteo.",
+   "Abrir activo/BOM relacionado."
+  ],
+  "drilldown": "Ítem → almacén → ubicación → lote/serie → movimiento → demanda/OT → RQ/PO."
+ },
+ {
+  "code": "FUR-DASH-BUY-001",
+  "route": "/app/dashboards/compras",
+  "slug": "compras",
+  "roleCode": "BUY",
+  "audience": "Compras, logística, costos, solicitantes autorizados",
+  "refresh": "15–60 min",
+  "domain": "FUR-RQ / FUR-OF / Odoo Purchase",
+  "objective": "Gestionar ciclo de abastecimiento desde requisición hasta oferta, adjudicación, orden y recepción.",
+  "sections": [
+   {
+    "id": "resumen-sourcing",
+    "title": "Resumen sourcing"
+   },
+   {
+    "id": "requisiciones",
+    "title": "Requisiciones"
+   },
+   {
+    "id": "aprobaciones",
+    "title": "Aprobaciones"
+   },
+   {
+    "id": "rfq",
+    "title": "RFQ"
+   },
+   {
+    "id": "ofertas-recibidas",
+    "title": "Ofertas recibidas"
+   },
+   {
+    "id": "comparativas",
+    "title": "Comparativas"
+   },
+   {
+    "id": "adjudicaciones",
+    "title": "Adjudicaciones"
+   },
+   {
+    "id": "ordenes-de-compra",
+    "title": "Órdenes de compra"
+   },
+   {
+    "id": "recepciones",
+    "title": "Recepciones"
+   },
+   {
+    "id": "proveedores",
+    "title": "Proveedores"
+   },
+   {
+    "id": "homologacion",
+    "title": "Homologación"
+   },
+   {
+    "id": "lead-time",
+    "title": "Lead time"
+   },
+   {
+    "id": "ahorros",
+    "title": "Ahorros"
+   },
+   {
+    "id": "expediting",
+    "title": "Expediting"
+   },
+   {
+    "id": "documentos-comerciales",
+    "title": "Documentos comerciales"
+   }
+  ],
+  "kpis": [
+   "RQ abiertas",
+   "RQ vencidas",
+   "RFQ activas",
+   "Ofertas pendientes",
+   "Tiempo RQ→PO",
+   "Ahorro sourcing",
+   "PO abiertas",
+   "Recepciones atrasadas",
+   "OTIF proveedor",
+   "Spend por categoría",
+   "Proveedores activos/homologados"
+  ],
+  "visualizations": [
+   "Funnel RQ→RFQ→OF→PO.",
+   "Aging de requisiciones.",
+   "Pareto spend.",
+   "Scorecard proveedor.",
+   "Trend lead time.",
+   "Ahorro vs baseline.",
+   "Calendario de entregas."
+  ],
+  "sources": [
+   "FUR-RQ",
+   "FUR-OF",
+   "purchase.requisition si aplica",
+   "purchase.order",
+   "res.partner",
+   "stock.picking",
+   "LuloWin/costos"
+  ],
+  "alerts": [
+   "RQ sin aprobación.",
+   "RFQ sin ofertas.",
+   "Oferta por vencer.",
+   "PO retrasada.",
+   "Proveedor no homologado.",
+   "Desviación comercial alta."
+  ],
+  "actions": [
+   "Crear RFQ.",
+   "Comparar ofertas.",
+   "Abrir proveedor.",
+   "Adjudicar según permiso.",
+   "Abrir PO.",
+   "Solicitar expediting.",
+   "Abrir FUR activo/repuesto relacionado."
+  ],
+  "drilldown": "RQ → líneas → RFQ → ofertas → comparativa → adjudicación → PO → recepción → activo/stock."
+ },
+ {
+  "code": "FUR-DASH-CST-001",
+  "route": "/app/dashboards/costos",
+  "slug": "costos",
+  "roleCode": "CST",
+  "audience": "Costos, presupuesto, dirección, proyectos",
+  "refresh": "15–60 min",
+  "domain": "LULO / Costos",
+  "objective": "Controlar presupuesto base, APU, compromisos, real, proyección y variaciones por proyecto, etapa y centro de costo.",
+  "sections": [
+   {
+    "id": "resumen-financiero",
+    "title": "Resumen financiero"
+   },
+   {
+    "id": "presupuesto-base",
+    "title": "Presupuesto base"
+   },
+   {
+    "id": "capitulos-partidas",
+    "title": "Capítulos/partidas"
+   },
+   {
+    "id": "apu",
+    "title": "APU"
+   },
+   {
+    "id": "materiales",
+    "title": "Materiales"
+   },
+   {
+    "id": "mano-de-obra",
+    "title": "Mano de obra"
+   },
+   {
+    "id": "equipos",
+    "title": "Equipos"
+   },
+   {
+    "id": "rendimientos",
+    "title": "Rendimientos"
+   },
+   {
+    "id": "indirectos",
+    "title": "Indirectos"
+   },
+   {
+    "id": "capex",
+    "title": "CAPEX"
+   },
+   {
+    "id": "opex",
+    "title": "OPEX"
+   },
+   {
+    "id": "comprometido",
+    "title": "Comprometido"
+   },
+   {
+    "id": "real",
+    "title": "Real"
+   },
+   {
+    "id": "forecast",
+    "title": "Forecast"
+   },
+   {
+    "id": "curva-s",
+    "title": "Curva S"
+   },
+   {
+    "id": "variaciones",
+    "title": "Variaciones"
+   },
+   {
+    "id": "flujo-de-caja",
+    "title": "Flujo de caja"
+   },
+   {
+    "id": "escenarios",
+    "title": "Escenarios"
+   },
+   {
+    "id": "reportes",
+    "title": "Reportes"
+   }
+  ],
+  "kpis": [
+   "Presupuesto base",
+   "Presupuesto vigente",
+   "Comprometido",
+   "Devengado/real",
+   "Forecast EAC",
+   "Variación costo",
+   "CPI/SPI si se formaliza",
+   "CAPEX vs OPEX",
+   "Costo por tonelada",
+   "Ahorro compras",
+   "Contingencia consumida"
+  ],
+  "visualizations": [
+   "Curva S.",
+   "Waterfall variación.",
+   "Treemap de costos.",
+   "Trend costo/t.",
+   "Burn rate.",
+   "Tabla APU.",
+   "Forecast mensual."
+  ],
+  "sources": [
+   "Motor LULO",
+   "Odoo Accounting/Analytic",
+   "Purchase",
+   "Stock valuation si aplica",
+   "FUR-RQ/FUR-OF",
+   "Project"
+  ],
+  "alerts": [
+   "Sobrepresupuesto.",
+   "Partida sin presupuesto.",
+   "Compromiso > disponibilidad.",
+   "Forecast excedido.",
+   "APU desactualizado.",
+   "Variación > umbral."
+  ],
+  "actions": [
+   "Abrir presupuesto.",
+   "Abrir APU.",
+   "Abrir PO asociado.",
+   "Comparar baseline/real.",
+   "Crear escenario.",
+   "Exportar control presupuestario."
+  ],
+  "drilldown": "Proyecto → capítulo → partida → APU → recurso → compromiso/PO → real → documento/evidencia."
+ },
+ {
+  "code": "FUR-DASH-ENG-001",
+  "route": "/app/dashboards/ingenieria",
+  "slug": "ingenieria",
+  "roleCode": "ENG",
+  "audience": "Ingeniería, proyectos, document control",
+  "refresh": "15–60 min",
+  "domain": "Ingeniería / Gobierno Técnico",
+  "objective": "Controlar documentación, cambios, MOC, revisiones, HOLD/TBC, avance de proyectos, punch list y madurez técnica.",
+  "sections": [
+   {
+    "id": "resumen-ingenieria",
+    "title": "Resumen ingeniería"
+   },
+   {
+    "id": "proyectos",
+    "title": "Proyectos"
+   },
+   {
+    "id": "moc",
+    "title": "MOC"
+   },
+   {
+    "id": "documentos",
+    "title": "Documentos"
+   },
+   {
+    "id": "revisiones",
+    "title": "Revisiones"
+   },
+   {
+    "id": "tbc-hold",
+    "title": "TBC/HOLD"
+   },
+   {
+    "id": "punch-list",
+    "title": "Punch list"
+   },
+   {
+    "id": "rfi-consultas",
+    "title": "RFI/consultas"
+   },
+   {
+    "id": "entregables",
+    "title": "Entregables"
+   },
+   {
+    "id": "as-built",
+    "title": "AS-BUILT"
+   },
+   {
+    "id": "fat-sat-uat",
+    "title": "FAT/SAT/UAT"
+   },
+   {
+    "id": "activos-nuevos-modificados",
+    "title": "Activos nuevos/modificados"
+   },
+   {
+    "id": "interfaces",
+    "title": "Interfaces"
+   },
+   {
+    "id": "riesgos-tecnicos",
+    "title": "Riesgos técnicos"
+   },
+   {
+    "id": "madurez-d0d5",
+    "title": "Madurez D0–D5"
+   }
+  ],
+  "kpis": [
+   "Entregables planificados/completados",
+   "TBC/HOLD abiertos",
+   "TBC/HOLD vencidos",
+   "MOC abiertos",
+   "Documentos por revisión",
+   "Punch pendientes",
+   "FAT/SAT/UAT completados",
+   "FUR promovidos D3→D4→D5",
+   "AS-BUILT pendientes"
+  ],
+  "visualizations": [
+   "Kanban de MOC.",
+   "Matriz de madurez.",
+   "Aging TBC/HOLD.",
+   "Curva de avance.",
+   "Matriz documentos vs activos.",
+   "Timeline de revisiones.",
+   "Punch Pareto."
+  ],
+  "sources": [
+   "FUR",
+   "ir.attachment/Documentos",
+   "project.project",
+   "MOC propio",
+   "Audit log",
+   "FAT/SAT/UAT",
+   "Modelos FUR especializados"
+  ],
+  "alerts": [
+   "TBC/HOLD vencido.",
+   "MOC sin aprobación.",
+   "Documento obsoleto.",
+   "Activo sin evidencia.",
+   "Cambio sin trazabilidad.",
+   "Punch crítico pendiente."
+  ],
+  "actions": [
+   "Crear MOC.",
+   "Abrir documento.",
+   "Comparar revisiones.",
+   "Cerrar TBC con evidencia.",
+   "Promover madurez.",
+   "Abrir FUR afectadas.",
+   "Exportar transmittal."
+  ],
+  "drilldown": "Proyecto → entregable/MOC → activo/FUR → documento → revisión → aprobación → evidencia."
+ },
+ {
+  "code": "FUR-DASH-HSE-001",
+  "route": "/app/dashboards/hse",
+  "slug": "hse",
+  "roleCode": "HSE",
+  "audience": "HSE, gerencia, operaciones",
+  "refresh": "5–15 min",
+  "domain": "HSE / Seguridad",
+  "objective": "Consolidar incidentes, condiciones inseguras, permisos, inspecciones y evidencias vinculadas a ubicación y activos.",
+  "sections": [
+   {
+    "id": "resumen-hse",
+    "title": "Resumen HSE"
+   },
+   {
+    "id": "incidentes",
+    "title": "Incidentes"
+   },
+   {
+    "id": "observaciones",
+    "title": "Observaciones"
+   },
+   {
+    "id": "inspecciones",
+    "title": "Inspecciones"
+   },
+   {
+    "id": "permisos-de-trabajo",
+    "title": "Permisos de trabajo"
+   },
+   {
+    "id": "riesgos",
+    "title": "Riesgos"
+   },
+   {
+    "id": "acciones-correctivas",
+    "title": "Acciones correctivas"
+   },
+   {
+    "id": "mapa-de-eventos",
+    "title": "Mapa de eventos"
+   },
+   {
+    "id": "camaras-relacionadas",
+    "title": "Cámaras relacionadas"
+   },
+   {
+    "id": "capacitacion-hse",
+    "title": "Capacitación HSE"
+   },
+   {
+    "id": "cumplimiento",
+    "title": "Cumplimiento"
+   },
+   {
+    "id": "tendencias",
+    "title": "Tendencias"
+   },
+   {
+    "id": "documentos",
+    "title": "Documentos"
+   }
+  ],
+  "kpis": [
+   "Incidentes por período",
+   "TRIFR/LTIFR si están aprobados",
+   "Acciones vencidas",
+   "Inspecciones completadas",
+   "Permisos activos",
+   "Hallazgos por severidad",
+   "Eventos CCTV vinculados",
+   "Cumplimiento capacitación HSE"
+  ],
+  "visualizations": [
+   "Mapa de calor.",
+   "Trend incidentes.",
+   "Pareto causas.",
+   "Aging acciones.",
+   "Matriz riesgo.",
+   "Calendario permisos."
+  ],
+  "sources": [
+   "HSE propio/Odoo Project o Quality según diseño final",
+   "FUR-CAM",
+   "FUR-MNT",
+   "LMS",
+   "Documentos",
+   "FUR de ubicación/activo"
+  ],
+  "alerts": [
+   "Incidente alto potencial.",
+   "Acción correctiva vencida.",
+   "Permiso vencido.",
+   "Inspección crítica fallida.",
+   "Cámara crítica offline en zona sensible."
+  ],
+  "actions": [
+   "Registrar incidente.",
+   "Crear acción.",
+   "Abrir evidencia CCTV.",
+   "Abrir FUR ubicación/activo.",
+   "Programar inspección.",
+   "Asignar curso HSE."
+  ],
+  "drilldown": "Evento → ubicación → activo → evidencia → acción → responsable → cierre/auditoría."
+ },
+ {
+  "code": "FUR-DASH-CAM-001",
+  "route": "/app/dashboards/camaras",
+  "slug": "camaras",
+  "roleCode": "SEC",
+  "audience": "Seguridad física, HSE, administradores autorizados",
+  "refresh": "5–30 s",
+  "domain": "FUR-CAM",
+  "objective": "Supervisar cámaras, grabación, almacenamiento, analíticas, cobertura y salud del sistema de video.",
+  "sections": [
+   {
+    "id": "video-wall",
+    "title": "Video wall"
+   },
+   {
+    "id": "mapa-de-camaras",
+    "title": "Mapa de cámaras"
+   },
+   {
+    "id": "camaras-online-offline",
+    "title": "Cámaras online/offline"
+   },
+   {
+    "id": "eventos-analiticos",
+    "title": "Eventos analíticos"
+   },
+   {
+    "id": "grabaciones",
+    "title": "Grabaciones"
+   },
+   {
+    "id": "retencion-storage",
+    "title": "Retención/storage"
+   },
+   {
+    "id": "cobertura",
+    "title": "Cobertura"
+   },
+   {
+    "id": "ptz",
+    "title": "PTZ"
+   },
+   {
+    "id": "analiticas",
+    "title": "Analíticas"
+   },
+   {
+    "id": "salud-de-red",
+    "title": "Salud de red"
+   },
+   {
+    "id": "mantenimiento",
+    "title": "Mantenimiento"
+   },
+   {
+    "id": "evidencias",
+    "title": "Evidencias"
+   },
+   {
+    "id": "auditoria-de-acceso",
+    "title": "Auditoría de acceso"
+   }
+  ],
+  "kpis": [
+   "Cámaras online (%)",
+   "Cámaras offline",
+   "Cobertura de zonas críticas",
+   "Storage disponible",
+   "Días de retención",
+   "Eventos analíticos",
+   "PTZ disponibles",
+   "Incidencias abiertas",
+   "Cámaras sin grabación"
+  ],
+  "visualizations": [
+   "Video wall.",
+   "Mapa geoespacial.",
+   "Health matrix.",
+   "Trend disponibilidad.",
+   "Storage capacity.",
+   "Timeline eventos.",
+   "Cobertura por zona."
+  ],
+  "sources": [
+   "FUR-CAM",
+   "VMS/NVR",
+   "FUR-GPON",
+   "FUR-PTE",
+   "FUR-MNT",
+   "Audit log"
+  ],
+  "alerts": [
+   "Cámara offline.",
+   "Grabación fallida.",
+   "Storage bajo.",
+   "Pérdida de enlace.",
+   "Analítica crítica.",
+   "Acceso no autorizado."
+  ],
+  "actions": [
+   "Abrir cámara.",
+   "Abrir playback.",
+   "Crear evidencia.",
+   "Crear OT.",
+   "Abrir red/energía relacionada.",
+   "Exportar clip según permiso."
+  ],
+  "drilldown": "Zona → cámara → stream/grabación → evento → evidencia → caso/incidente → auditoría."
+ },
+ {
+  "code": "FUR-DASH-LMS-001",
+  "route": "/app/dashboards/lms",
+  "slug": "lms",
+  "roleCode": "INS",
+  "audience": "Instructor, RRHH, gerencia, responsables de competencia",
+  "refresh": "15–60 min",
+  "domain": "LMS",
+  "objective": "Gestionar cursos, rutas de aprendizaje, progreso, evaluaciones, certificaciones y competencias vinculadas a roles/activos.",
+  "sections": [
+   {
+    "id": "resumen-lms",
+    "title": "Resumen LMS"
+   },
+   {
+    "id": "catalogo-cursos",
+    "title": "Catálogo cursos"
+   },
+   {
+    "id": "rutas-de-aprendizaje",
+    "title": "Rutas de aprendizaje"
+   },
+   {
+    "id": "inscripciones",
+    "title": "Inscripciones"
+   },
+   {
+    "id": "progreso",
+    "title": "Progreso"
+   },
+   {
+    "id": "evaluaciones",
+    "title": "Evaluaciones"
+   },
+   {
+    "id": "certificaciones",
+    "title": "Certificaciones"
+   },
+   {
+    "id": "vencimientos",
+    "title": "Vencimientos"
+   },
+   {
+    "id": "competencias",
+    "title": "Competencias"
+   },
+   {
+    "id": "instructores",
+    "title": "Instructores"
+   },
+   {
+    "id": "estudiantes",
+    "title": "Estudiantes"
+   },
+   {
+    "id": "calendario",
+    "title": "Calendario"
+   },
+   {
+    "id": "contenido",
+    "title": "Contenido"
+   },
+   {
+    "id": "reportes",
+    "title": "Reportes"
+   }
+  ],
+  "kpis": [
+   "Cursos activos",
+   "Inscritos",
+   "Finalización (%)",
+   "Aprobación (%)",
+   "Certificaciones vigentes",
+   "Certificaciones por vencer",
+   "Horas de formación",
+   "Gap de competencia",
+   "Cursos obligatorios pendientes"
+  ],
+  "visualizations": [
+   "Matriz de competencias.",
+   "Trend finalización.",
+   "Calendario.",
+   "Distribución calificaciones.",
+   "Aging de vencimientos.",
+   "Ranking de rutas por adopción sin evaluación de personas."
+  ],
+  "sources": [
+   "Odoo eLearning/LMS",
+   "hr.employee",
+   "res.users",
+   "FUR roles/activos",
+   "Documentos de curso"
+  ],
+  "alerts": [
+   "Certificación por vencer.",
+   "Curso obligatorio pendiente.",
+   "Evaluación vencida.",
+   "Instructor sin material aprobado."
+  ],
+  "actions": [
+   "Crear curso.",
+   "Asignar ruta.",
+   "Inscribir usuarios.",
+   "Emitir certificado según regla.",
+   "Abrir competencia.",
+   "Exportar reporte."
+  ],
+  "drilldown": "Rol/competencia → curso → módulo → usuario → evaluación → certificación → evidencia."
+ },
+ {
+  "code": "FUR-DASH-SUP-001",
+  "route": "/app/dashboards/proveedor",
+  "slug": "proveedor",
+  "roleCode": "SUP",
+  "audience": "Proveedor/Vendedor externo autorizado",
+  "refresh": "15–60 min",
+  "domain": "Portal Externo",
+  "objective": "Dar a proveedores una vista segura de RFQ, ofertas, PO, entregas, documentos y score propio.",
+  "sections": [
+   {
+    "id": "resumen",
+    "title": "Resumen"
+   },
+   {
+    "id": "rfq-recibidas",
+    "title": "RFQ recibidas"
+   },
+   {
+    "id": "mis-ofertas",
+    "title": "Mis ofertas"
+   },
+   {
+    "id": "ordenes-de-compra",
+    "title": "Órdenes de compra"
+   },
+   {
+    "id": "entregas",
+    "title": "Entregas"
+   },
+   {
+    "id": "documentos",
+    "title": "Documentos"
+   },
+   {
+    "id": "productos-servicios",
+    "title": "Productos/servicios"
+   },
+   {
+    "id": "certificaciones",
+    "title": "Certificaciones"
+   },
+   {
+    "id": "mensajes",
+    "title": "Mensajes"
+   },
+   {
+    "id": "score-propio",
+    "title": "Score propio"
+   },
+   {
+    "id": "facturacion-estado-si-se-habilita",
+    "title": "Facturación/estado si se habilita"
+   },
+   {
+    "id": "perfil",
+    "title": "Perfil"
+   }
+  ],
+  "kpis": [
+   "RFQ abiertas",
+   "Ofertas enviadas",
+   "Ofertas por vencer",
+   "PO abiertas",
+   "Entregas próximas",
+   "Entregas atrasadas",
+   "Documentos por renovar",
+   "OTIF propio",
+   "Score de proveedor propio"
+  ],
+  "visualizations": [
+   "Funnel comercial.",
+   "Calendario entregas.",
+   "Trend OTIF.",
+   "Estado documental.",
+   "Timeline mensajes."
+  ],
+  "sources": [
+   "FUR-RQ/FUR-OF filtradas",
+   "purchase.order",
+   "res.partner",
+   "stock.picking",
+   "Documentos del proveedor"
+  ],
+  "alerts": [
+   "RFQ por vencer.",
+   "Documento vencido.",
+   "Entrega atrasada.",
+   "PO modificada.",
+   "Solicitud de aclaración."
+  ],
+  "actions": [
+   "Responder RFQ.",
+   "Actualizar oferta.",
+   "Confirmar entrega.",
+   "Subir documento.",
+   "Actualizar perfil.",
+   "Enviar mensaje."
+  ],
+  "drilldown": "RFQ propia → oferta propia → PO propia → entrega → documento/recepción. ABAC obligatorio por partner."
+ },
+ {
+  "code": "FUR-DASH-AUD-001",
+  "route": "/app/dashboards/auditoria",
+  "slug": "auditoria",
+  "roleCode": "AUD",
+  "audience": "Auditores, administrador, gobierno de datos",
+  "refresh": "15–60 min",
+  "domain": "Gobierno / Auditoría",
+  "objective": "Proveer trazabilidad completa de cambios, accesos, aprobaciones, calidad del dato, madurez y evidencias.",
+  "sections": [
+   {
+    "id": "resumen-de-gobierno",
+    "title": "Resumen de gobierno"
+   },
+   {
+    "id": "audit-log",
+    "title": "Audit log"
+   },
+   {
+    "id": "cambios-fur",
+    "title": "Cambios FUR"
+   },
+   {
+    "id": "accesos",
+    "title": "Accesos"
+   },
+   {
+    "id": "aprobaciones",
+    "title": "Aprobaciones"
+   },
+   {
+    "id": "calidad-del-dato",
+    "title": "Calidad del dato"
+   },
+   {
+    "id": "madurez-d0d5",
+    "title": "Madurez D0–D5"
+   },
+   {
+    "id": "tbc-hold",
+    "title": "TBC/HOLD"
+   },
+   {
+    "id": "documentos-evidencias",
+    "title": "Documentos/evidencias"
+   },
+   {
+    "id": "permisos-rbac",
+    "title": "Permisos/RBAC"
+   },
+   {
+    "id": "integridad-referencial",
+    "title": "Integridad referencial"
+   },
+   {
+    "id": "datos-huerfanos",
+    "title": "Datos huérfanos"
+   },
+   {
+    "id": "interfaces",
+    "title": "Interfaces"
+   },
+   {
+    "id": "exportaciones",
+    "title": "Exportaciones"
+   },
+   {
+    "id": "hallazgos",
+    "title": "Hallazgos"
+   }
+  ],
+  "kpis": [
+   "Eventos de auditoría",
+   "Cambios sin evidencia",
+   "Accesos fallidos",
+   "Aprobaciones pendientes",
+   "Registros D0–D2",
+   "Registros D4/D5",
+   "TBC/HOLD vencidos",
+   "Documentos sin revisión vigente",
+   "Relaciones huérfanas",
+   "Excepciones RBAC"
+  ],
+  "visualizations": [
+   "Timeline de cambios.",
+   "Matriz de madurez.",
+   "Aging TBC/HOLD.",
+   "Heatmap de accesos.",
+   "Pareto de excepciones.",
+   "Matriz entidad→evidencia."
+  ],
+  "sources": [
+   "fur_audit_event",
+   "fur_data_quality",
+   "fur_status_history",
+   "ir.attachment",
+   "Odoo mail.message/activity",
+   "logs de seguridad",
+   "tablas FUR"
+  ],
+  "alerts": [
+   "Cambio sin usuario/origen.",
+   "Promoción de madurez sin evidencia.",
+   "Acceso indebido.",
+   "Relación huérfana.",
+   "Documento vencido.",
+   "Exportación masiva anómala."
+  ],
+  "actions": [
+   "Abrir evento.",
+   "Abrir FUR.",
+   "Comparar versiones.",
+   "Exportar evidencia.",
+   "Crear hallazgo.",
+   "Asignar responsable.",
+   "Cerrar hallazgo con evidencia."
+  ],
+  "drilldown": "Indicador de gobierno → excepción → entidad/FUR → evento → usuario → documento/evidencia → resolución."
+ }
+]

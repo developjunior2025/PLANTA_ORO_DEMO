@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: oro-planta-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: oro_planta
+      POSTGRES_PASSWORD: oro_planta
+      POSTGRES_DB: oro_planta
+    ports:
+      - "55432:5432"
+    volumes:
+      - oro_planta_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U oro_planta"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  oro_planta_pg_data:

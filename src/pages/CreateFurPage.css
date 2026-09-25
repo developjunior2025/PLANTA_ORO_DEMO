@@ -1,0 +1,91 @@
+.create-fur {
+  max-width: 860px;
+  padding: 32px 24px 48px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.create-fur__head h1 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--color-navy-900);
+  margin-bottom: 8px;
+}
+
+.create-fur__head p {
+  color: var(--color-gray-500);
+  font-size: 13px;
+  max-width: 80ch;
+}
+
+.create-fur__head code {
+  background: var(--color-gray-100);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.create-fur__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.create-fur__span2 {
+  grid-column: span 2;
+}
+
+.create-fur__form label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-gray-600);
+}
+
+.create-fur__form input,
+.create-fur__form select {
+  padding: 9px 12px;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--radius-sm);
+  font-size: 13.5px;
+  font-weight: 400;
+  color: var(--color-navy-900);
+}
+
+.create-fur__error {
+  margin-top: 14px;
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+}
+
+.create-fur__actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.create-fur__actions .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+@media (max-width: 640px) {
+  .create-fur__grid {
+    grid-template-columns: 1fr;
+  }
+  .create-fur__span2 {
+    grid-column: span 1;
+  }
+}

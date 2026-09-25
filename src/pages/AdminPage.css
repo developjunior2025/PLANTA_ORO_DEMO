@@ -1,0 +1,34 @@
+.admin {
+  padding: 32px 24px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin__head h1 {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--color-navy-900);
+  margin-bottom: 6px;
+}
+
+.admin__head p {
+  color: var(--color-gray-500);
+  font-size: 13px;
+  max-width: 90ch;
+}
+
+.admin__notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.admin__role {
+  font-weight: 700;
+  color: var(--color-navy-900);
+}

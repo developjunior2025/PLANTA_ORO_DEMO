@@ -1,0 +1,178 @@
+// Esquema real de PostgreSQL para el prototipo del Ecosistema FUR.
+// Simplificación deliberada frente al modelo completo del plan (fur_relation,
+// fur_document_link, etc. como tablas propias): aquí relations/documents/holds/
+// technicalFields de una ficha FUR se guardan como columnas jsonb. Sigue siendo
+// una base de datos real y consultable — no arrays en memoria del navegador —
+// pero la normalización completa queda para cuando se implemente fur_core (Etapa 4).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model FurRecord {
+  id                 String   @id @default(uuid())
+  furCode            String   @unique
+  uuid               String   @unique
+  domain             String
+  name               String
+  family             String
+  status             String
+  criticality        String
+  maturity           String
+  dataQualityPercent Int
+  zone               String
+  area               String
+  process            String
+  coordinates        String
+  manufacturer       String
+  model              String
+  serial             String
+  supplier           String
+  createdAt          String
+  version            String
+  image              String
+  technicalFields    Json
+  relations          Json
+  documents          Json
+  holds              Json
+  updatedAt          DateTime @updatedAt
+
+  @@index([domain])
+}
+
+model CatalogEntity {
+  id         String  @id @default(uuid())
+  furCode    String  @unique
+  entityType String
+  domain     String?
+  title      String
+  subtitle   String
+  meta       Json
+  status     String
+  image      String
+  price      String?
+  rating     Float?
+
+  @@index([entityType])
+}
+
+model StockItem {
+  id           String  @id @default(uuid())
+  sku          String  @unique
+  name         String
+  category     String
+  warehouse    String
+  location     String
+  qty          Float
+  uom          String
+  reorderPoint Float
+  linkedFur    String?
+  lastMovement String
+}
+
+model BudgetProject {
+  id       String          @id @default(uuid())
+  code     String          @unique
+  name     String
+  currency String
+  chapters BudgetChapter[]
+}
+
+model BudgetChapter {
+  id        String       @id @default(uuid())
+  code      String
+  name      String
+  projectId String
+  project   BudgetProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  items     BudgetItem[]
+}
+
+model BudgetItem {
+  code      String
+  id        String           @id @default(uuid())
+  name      String
+  unit      String
+  quantity  Float
+  factor    Float
+  linkedFur String?
+  chapterId String
+  chapter   BudgetChapter    @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  resources BudgetResource[]
+}
+
+model BudgetResource {
+  id        String     @id @default(uuid())
+  type      String
+  name      String
+  unit      String
+  quantity  Float
+  unitPrice Float
+  itemId    String
+  item      BudgetItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+}
+
+/// Series de tiempo cortas para los gráficos del dashboard (tendencia de
+/// producción, demanda eléctrica, Pareto de fallas, etc.). Guardadas como
+/// jsonb bajo una clave — no vienen de Historian/SCADA real (Etapa 11, HOLD).
+model ChartSeries {
+  id   String @id @default(uuid())
+  key  String @unique
+  data Json
+}
+
+/// Auditoría real (Etapa 5.4 del plan: FUR_CREATED, FUR_UPDATED,
+/// STATUS_CHANGED, STOCK_MOVEMENT, etc.). subjectCode es el furCode o SKU
+/// afectado. Alimenta la pestaña "Historial" de cada ficha FUR.
+model AuditEvent {
+  id          String   @id @default(uuid())
+  subjectCode String
+  eventType   String
+  description String
+  createdAt   DateTime @default(now())
+
+  @@index([subjectCode])
+}
+
+// Configuración de dashboards (documento maestro de dashboards §14: fur_dashboard,
+// fur_dashboard_kpi_definition). Identidad, menú contextual, fuentes, alertas y acciones
+// viven aquí; la presentación (gráficos) vive en el registro de widgets del frontend (§10.3).
+model Dashboard {
+  id             String   @id @default(uuid())
+  code           String   @unique
+  slug           String   @unique
+  route          String
+  roleCode       String
+  audience       String
+  domain         String
+  refresh        String
+  objective      String
+  drilldown      String
+  sections       Json
+  visualizations Json
+  sources        Json
+  alerts         Json
+  actions        Json
+  version        String   @default("REV.00")
+  updatedAt      DateTime @updatedAt
+}
+
+model KpiDefinition {
+  id             String  @id @default(uuid())
+  code           String  @unique
+  dashboardCode  String
+  name           String
+  description    String
+  unit           String?
+  formula        String?
+  owner          String
+  version        String  @default("v0.1")
+  approvalStatus String  @default("Pendiente de aprobación")
+  sortOrder      Int
+
+  @@index([dashboardCode])
+}
