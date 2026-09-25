@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# CI local (subirlo requiere un token con permiso "workflow")
+.github/workflows/
