@@ -1,0 +1,21 @@
+# Backend NestJS en Render (plan free). Blueprint: New > Blueprint > repo PLANTA_ORO_DEMO.
+# La base PostgreSQL vive en Neon (u otra): pega su DATABASE_URL en el panel de Render.
+services:
+  - type: web
+    name: oro-planta-api
+    runtime: node
+    plan: free
+    rootDir: server
+    buildCommand: npm install --include=dev && npx prisma generate && npm run build
+    # Migra y siembra (idempotente) en cada arranque: el plan free no tiene shell para hacerlo a mano.
+    startCommand: npm run start:cloud
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SKIP_IF_SEEDED # omite el seed si la base ya tiene datos
+        value: "1"
+      - key: DATABASE_URL # cadena de conexión DIRECTA de Neon (no la "pooled"), con ?sslmode=require
+        sync: false
+      - key: CORS_ORIGIN # URL del frontend en Netlify, ej. https://oro-planta.netlify.app
+        sync: false

@@ -25,6 +25,12 @@ import {
 const prisma = new PrismaClient();
 
 async function main() {
+  // En la nube el seed corre en cada arranque; si ya hay datos se omite para no retrasar el despertar del servicio.
+  if (process.env.SKIP_IF_SEEDED === "1" && (await prisma.dashboard.count()) > 0) {
+    console.log("Base ya sembrada: se omite el seed.");
+    return;
+  }
+
   console.log("Seeding fur_records...");
   for (const r of [...FUR_RECORDS, ...EXTRA_FUR_RECORDS]) {
     await prisma.furRecord.upsert({

@@ -81,3 +81,27 @@ Backend (`server/`):
   proveedores, KPIs, presupuesto). Conectar esto a Odoo 19, SCADA/Historian o
   cualquier sistema real de la planta es trabajo aparte, pendiente de acceso
   a esa infraestructura (ver `public/ORO/*.md`, sección de HOLD/TBC).
+
+## Despliegue en la nube (Neon + Render + Netlify)
+
+Tres piezas independientes; los archivos de configuración ya están en el repo.
+
+1. **Base de datos — Neon** (o cualquier PostgreSQL). Crea un proyecto y copia la cadena de conexión
+   **directa** (la que no dice "pooled"), que termina en `?sslmode=require`. Prisma necesita la directa para migrar.
+2. **Backend — Render.** *New > Blueprint* y elige este repo: lee [`render.yaml`](render.yaml)
+   (`rootDir: server`). Pide dos valores en el panel:
+   - `DATABASE_URL`: la cadena de Neon.
+   - `CORS_ORIGIN`: la URL del frontend (paso 3). Puede dejarse provisional y actualizarse después.
+
+   Cada arranque ejecuta `prisma migrate deploy` y un seed idempotente que se omite si la base ya tiene datos
+   (`npm run start:cloud`). Health check: `/api/v1/health`. En el plan free el servicio duerme tras ~15 min sin
+   tráfico y la primera visita tarda unos segundos.
+3. **Frontend — Netlify.** *Add new site > Import from Git* con este repo; lee [`netlify.toml`](netlify.toml)
+   (build `npm run build`, publica `dist`, con la regla SPA que evita el 404 al recargar rutas).
+   Define la variable `VITE_API_URL=https://<tu-backend>.onrender.com/api/v1` **antes** del primer build
+   (Vite la incrusta al compilar; si cambia, hay que volver a desplegar).
+
+Después actualiza `CORS_ORIGIN` en Render con la URL real de Netlify.
+
+**Antes de dejarlo abierto:** no hay autenticación real (el selector de rol es una demo), así que cualquiera con la
+URL del backend puede crear/editar fichas y registrar movimientos de stock. Úsalo como demo privada o agrega login primero.

@@ -1,0 +1,14 @@
+# Frontend Vite en Netlify. Define VITE_API_URL en el panel del sitio
+# (Site configuration > Environment variables): https://<tu-backend>.onrender.com/api/v1
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# SPA: cualquier ruta (/app/dashboards/planta, /planta/tiempo-real…) sirve index.html.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -6,7 +6,8 @@
   "scripts": {
     "build": "nest build",
     "dev": "nest start --watch",
-    "start": "node dist/main.js",
+    "start": "node dist/src/main.js",
+    "start:cloud": "prisma migrate deploy && ts-node prisma/seed.ts && node dist/src/main.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev --name init",
     "prisma:deploy": "prisma migrate deploy",
