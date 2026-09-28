@@ -27,35 +27,42 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("Seeding fur_records...");
   for (const r of [...FUR_RECORDS, ...EXTRA_FUR_RECORDS]) {
+    // Contenido de la demo (nombre, zona, etapa, documentación...): se sincroniza en cada seed.
+    // status/criticality/maturity/dataQualityPercent/holds son editables desde la app real (CRUD de
+    // la ficha FUR) y no se tocan si la ficha ya existe, para no pisar ediciones hechas en el sitio.
+    const demoContent = {
+      domain: r.domain,
+      name: r.name,
+      family: r.family,
+      zone: r.zone,
+      stage: "stage" in r ? r.stage : null,
+      area: r.area,
+      process: r.process,
+      coordinates: r.coordinates,
+      manufacturer: r.manufacturer,
+      model: r.model,
+      serial: r.serial,
+      supplier: r.supplier,
+      version: r.version,
+      image: `/placeholders/${r.domain}.svg`,
+      technicalFields: r.technicalFields as unknown as Prisma.InputJsonValue,
+      relations: r.relations as unknown as Prisma.InputJsonValue,
+      documents: r.documents as unknown as Prisma.InputJsonValue,
+    };
     await prisma.furRecord.upsert({
       where: { furCode: r.furCode },
       create: {
         furCode: r.furCode,
         uuid: r.uuid,
-        domain: r.domain,
-        name: r.name,
-        family: r.family,
         status: r.status,
         criticality: r.criticality,
         maturity: r.maturity,
         dataQualityPercent: r.dataQualityPercent,
-        zone: r.zone,
-        area: r.area,
-        process: r.process,
-        coordinates: r.coordinates,
-        manufacturer: r.manufacturer,
-        model: r.model,
-        serial: r.serial,
-        supplier: r.supplier,
         createdAt: r.createdAt,
-        version: r.version,
-        image: `/placeholders/${r.domain}.svg`,
-        technicalFields: r.technicalFields as unknown as Prisma.InputJsonValue,
-        relations: r.relations as unknown as Prisma.InputJsonValue,
-        documents: r.documents as unknown as Prisma.InputJsonValue,
         holds: r.holds as unknown as Prisma.InputJsonValue,
+        ...demoContent,
       },
-      update: {},
+      update: demoContent,
     });
   }
 

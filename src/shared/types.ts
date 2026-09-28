@@ -76,6 +76,8 @@ export interface FurRecord {
   maturity: DataMaturity;
   dataQualityPercent: number;
   zone: string;
+  /** Etapa de la cadena productiva maestra (código "01".."18"), solo cuando aplica. */
+  stage?: string | null;
   area: string;
   process: string;
   coordinates: string;

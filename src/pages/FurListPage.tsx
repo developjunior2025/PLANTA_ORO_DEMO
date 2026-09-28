@@ -5,6 +5,7 @@ import { fetchFurList } from "../shared/api";
 import { FurCard } from "../components/ui/FurCard";
 import { NetworkIcon } from "../components/ui/NetworkIcon";
 import { DOMAIN_LIST } from "../shared/domains";
+import { STAGES } from "../shared/stages";
 import type { AssetStatus, DomainCode, FurRecord } from "../shared/types";
 
 export function FurListPage({
@@ -18,9 +19,9 @@ export function FurListPage({
 }) {
   const [query, setQuery] = useState("");
   const [activeDomain, setActiveDomain] = useState<DomainCode | null>(null);
-  // Zona/etapa: se filtra por el valor real que la planta registró en cada ficha FUR (campo `zone`),
-  // no por una lista fija — si un área todavía no tiene fichas cargadas, no aparece como opción.
-  const [activeZone, setActiveZone] = useState<string | null>(null);
+  // Etapa de la cadena productiva maestra (D01–D18, igual que en el catálogo): lista fija de 18,
+  // con el conteo real de fichas FUR de esta vista que la planta ya clasificó en cada una.
+  const [activeStage, setActiveStage] = useState<string | null>(null);
   const [status, setStatus] = useState<AssetStatus | "Todos">("Todos");
   const [records, setRecords] = useState<FurRecord[] | null>(null);
 
@@ -43,10 +44,11 @@ export function FurListPage({
     for (const r of records ?? []) m.set(r.domain, (m.get(r.domain) ?? 0) + 1);
     return m;
   }, [records]);
-  const zones = useMemo(
-    () => Array.from(new Set((records ?? []).map((r) => r.zone))).sort(),
-    [records]
-  );
+  const countByStage = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const r of records ?? []) if (r.stage) m.set(r.stage, (m.get(r.stage) ?? 0) + 1);
+    return m;
+  }, [records]);
   const statuses = useMemo(
     () => Array.from(new Set((records ?? []).map((r) => r.status))).sort() as AssetStatus[],
     [records]
@@ -58,11 +60,11 @@ export function FurListPage({
         const q = query.toLowerCase();
         const matchesQuery = !q || r.name.toLowerCase().includes(q) || r.furCode.toLowerCase().includes(q);
         const matchesDomain = !activeDomain || r.domain === activeDomain;
-        const matchesZone = !activeZone || r.zone === activeZone;
+        const matchesStage = !activeStage || r.stage === activeStage;
         const matchesStatus = status === "Todos" || r.status === status;
-        return matchesQuery && matchesDomain && matchesZone && matchesStatus;
+        return matchesQuery && matchesDomain && matchesStage && matchesStatus;
       }),
-    [records, query, activeDomain, activeZone, status]
+    [records, query, activeDomain, activeStage, status]
   );
 
   return (
@@ -85,7 +87,7 @@ export function FurListPage({
               onClick={() => {
                 setQuery("");
                 setActiveDomain(null);
-                setActiveZone(null);
+                setActiveStage(null);
                 setStatus("Todos");
               }}
             >
@@ -133,26 +135,26 @@ export function FurListPage({
             </div>
           </div>
 
-          {zones.length > 0 && (
-            <div className="catalog-filters__group">
-              <h4>
-                <Layers size={14} /> Zona / etapa
-              </h4>
-              <p className="catalog-filters__hint">Valor registrado en la ficha FUR de cada activo.</p>
-              <select
-                className="catalog-filters__select"
-                value={activeZone ?? ""}
-                onChange={(e) => setActiveZone(e.target.value || null)}
-              >
-                <option value="">Todas las zonas</option>
-                {zones.map((z) => (
-                  <option key={z} value={z}>
-                    {z} ({(records ?? []).filter((r) => r.zone === z).length})
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
+          <div className="catalog-filters__group">
+            <h4>
+              <Layers size={14} /> Etapa (cadena productiva)
+            </h4>
+            <p className="catalog-filters__hint">
+              Las 18 etapas D01–D18. Solo cuenta lo que ya está clasificado en las fichas de esta vista.
+            </p>
+            <select
+              className="catalog-filters__select"
+              value={activeStage ?? ""}
+              onChange={(e) => setActiveStage(e.target.value || null)}
+            >
+              <option value="">Todas las etapas</option>
+              {STAGES.map((s) => (
+                <option key={s.code} value={s.code}>
+                  D{s.code} — {s.label} ({countByStage.get(s.code) ?? 0})
+                </option>
+              ))}
+            </select>
+          </div>
 
           {statuses.length > 0 && (
             <div className="catalog-filters__group">

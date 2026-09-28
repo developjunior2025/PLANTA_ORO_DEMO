@@ -21,6 +21,7 @@ export const FUR_RECORDS = [
     maturity: "D4",
     dataQualityPercent: 82,
     zone: "03 - Molienda",
+    stage: "06",
     area: "Molienda",
     process: "Conminución",
     coordinates: "-12.0467, -76.9381",
@@ -119,6 +120,7 @@ export const FUR_RECORDS = [
     maturity: "D4",
     dataQualityPercent: 86,
     zone: "03 - Molienda",
+    stage: "05",
     area: "Molienda",
     process: "Clasificación / Impulsión",
     coordinates: "-12.0467, -76.9381",
@@ -213,6 +215,7 @@ export const FUR_RECORDS = [
     maturity: "D3",
     dataQualityPercent: 74,
     zone: "03 - Molienda",
+    stage: "06",
     area: "Molienda",
     process: "Conminución",
     coordinates: "-12.0467, -76.9381",
@@ -296,6 +299,7 @@ export const FUR_RECORDS = [
     maturity: "D3",
     dataQualityPercent: 70,
     zone: "03 - Molienda",
+    stage: "06",
     area: "Molienda",
     process: "Conminución",
     coordinates: "-12.0467, -76.9381",
@@ -417,6 +421,7 @@ export const FUR_RECORDS = [
     maturity: "D3",
     dataQualityPercent: 76,
     zone: "03 - Molienda",
+    stage: "06",
     area: "Seguridad",
     process: "Monitoreo de video",
     coordinates: "-12.0467, -76.9381",
@@ -615,7 +620,7 @@ export const LAB_SAMPLES_BY_STATUS = [
 function mkFur(p: {
   furCode: string; uuid: string; domain: string; name: string; family: string;
   criticality: string; maturity: string; dataQualityPercent: number;
-  zone: string; area: string; process: string; manufacturer?: string; model?: string;
+  zone: string; stage?: string; area: string; process: string; manufacturer?: string; model?: string;
   technicalFields: { label: string; value: string; unit: string; condition: string; maturity: string }[];
   relations: { type: string; target: string; targetLabel: string; cardinality: string; description: string }[];
   holds: { level: string; description: string }[];
@@ -639,7 +644,7 @@ export const EXTRA_FUR_RECORDS = [
   mkFur({
     furCode: "FUR-PROC-00050", uuid: "7a1c0d50-0050-4b1e-9c11-0000000000a1", domain: "PROC",
     name: "Línea de Molienda", family: "Sistema / Línea de proceso", criticality: "Alta", maturity: "D3",
-    dataQualityPercent: 68, zone: "03 - Molienda", area: "Molienda", process: "Conminución",
+    dataQualityPercent: 68, zone: "03 - Molienda", stage: "06", area: "Molienda", process: "Conminución",
     technicalFields: [
       { label: "Etapa", value: "Molienda primaria y clasificación", unit: "", condition: "CONFIRMADO", maturity: "D3" },
       { label: "Capacidad de diseño", value: "450", unit: "t/h", condition: "REFERENCIAL", maturity: "D3" },
@@ -655,7 +660,7 @@ export const EXTRA_FUR_RECORDS = [
   mkFur({
     furCode: "FUR-PROC-00130", uuid: "7a1c0d50-0130-4b1e-9c11-0000000000a2", domain: "PROC",
     name: "Clasificador (Hidrociclones)", family: "Equipo de proceso / Clasificación", criticality: "Media", maturity: "D2",
-    dataQualityPercent: 52, zone: "03 - Molienda", area: "Molienda", process: "Clasificación",
+    dataQualityPercent: 52, zone: "03 - Molienda", stage: "08", area: "Molienda", process: "Clasificación",
     manufacturer: "Weir Minerals", model: "Cavex (por confirmar)",
     technicalFields: [
       { label: "Tipo", value: "Batería de hidrociclones", unit: "", condition: "REFERENCIAL", maturity: "D2" },
@@ -670,7 +675,7 @@ export const EXTRA_FUR_RECORDS = [
   mkFur({
     furCode: "FUR-PROC-00131", uuid: "7a1c0d50-0131-4b1e-9c11-0000000000a3", domain: "PROC",
     name: "Bomba de Descarga de Molino", family: "Equipo de proceso / Bombeo de pulpa", criticality: "Alta", maturity: "D2",
-    dataQualityPercent: 55, zone: "03 - Molienda", area: "Molienda", process: "Impulsión",
+    dataQualityPercent: 55, zone: "03 - Molienda", stage: "05", area: "Molienda", process: "Impulsión",
     manufacturer: "Weir Minerals", model: "Warman 6/4 (por confirmar)",
     technicalFields: [
       { label: "Servicio", value: "Pulpa de descarga de molino", unit: "", condition: "CONFIRMADO", maturity: "D3" },

@@ -26,6 +26,9 @@ model FurRecord {
   maturity           String
   dataQualityPercent Int
   zone               String
+  // Etapa de la cadena productiva maestra (código "01".."18"): solo cuando el activo/proceso
+  // corresponde a un paso concreto del flowsheet, no a infraestructura transversal (potencia, TI, etc.).
+  stage              String?
   area               String
   process            String
   coordinates        String
