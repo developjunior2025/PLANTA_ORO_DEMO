@@ -13,8 +13,6 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: SKIP_IF_SEEDED # omite el seed si la base ya tiene datos
-        value: "1"
       - key: DATABASE_URL # cadena de conexión DIRECTA de Neon (no la "pooled"), con ?sslmode=require
         sync: false
       - key: CORS_ORIGIN # URL del frontend en Netlify, ej. https://oro-planta.netlify.app

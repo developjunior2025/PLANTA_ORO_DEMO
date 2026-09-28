@@ -93,9 +93,9 @@ Tres piezas independientes; los archivos de configuración ya están en el repo.
    - `DATABASE_URL`: la cadena de Neon.
    - `CORS_ORIGIN`: la URL del frontend (paso 3). Puede dejarse provisional y actualizarse después.
 
-   Cada arranque ejecuta `prisma migrate deploy` y un seed idempotente que se omite si la base ya tiene datos
-   (`npm run start:cloud`). Health check: `/api/v1/health`. En el plan free el servicio duerme tras ~15 min sin
-   tráfico y la primera visita tarda unos segundos.
+   Cada arranque ejecuta `prisma migrate deploy` y siembra los datos de ejemplo con upsert (`npm run start:cloud`),
+   así que cada redeploy actualiza también el contenido en Neon si cambió el seed. Health check: `/api/v1/health`.
+   En el plan free el servicio duerme tras ~15 min sin tráfico y la primera visita tarda unos segundos.
 3. **Frontend — Netlify.** *Add new site > Import from Git* con este repo; lee [`netlify.toml`](netlify.toml)
    (build `npm run build`, publica `dist`, con la regla SPA que evita el 404 al recargar rutas).
    Define la variable `VITE_API_URL=https://<tu-backend>.onrender.com/api/v1` **antes** del primer build
