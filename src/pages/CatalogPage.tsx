@@ -1,15 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
-import { Map as MapIcon, Network, SlidersHorizontal } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
+import { Network, SlidersHorizontal } from "lucide-react";
 import "./CatalogPage.css";
 import { fetchCatalog } from "../shared/api";
 import { EntityCard } from "../components/ui/EntityCard";
 import { NetworkIcon } from "../components/ui/NetworkIcon";
 import { DOMAIN_LIST } from "../shared/domains";
 import type { CatalogEntity, DomainCode } from "../shared/types";
-
-// "Redes" va primero: es la vista con la que abre el catálogo (las 10 redes transversales).
-const TABS = ["Redes", "Todos", "Activos Físicos", "Procesos", "Servicio", "Documentos", "Laboratorio", "Dashboards", "Mapas"];
 
 export function CatalogPage() {
   const [params] = useSearchParams();
@@ -34,9 +31,11 @@ function CatalogInner({
   initialDomain: DomainCode | null;
 }) {
   const [query, setQuery] = useState(initialQuery);
-  // Al entrar sin buscar ni filtrar nada, la vista principal es la de las 10 redes, no la mezcla de
-  // proveedores/personas/servicios/etc. Si se llega con una búsqueda o un tipo desde el header, se ve esa.
-  const [activeTab, setActiveTab] = useState(initialType || initialDomain || initialQuery ? "Todos" : "Redes");
+  // Vista principal: "Redes" (las 10 redes transversales) o "Todos" (entidades) cuando se llega
+  // con una búsqueda/tipo desde el header o se elige una red en el panel lateral.
+  const [activeTab, setActiveTab] = useState<"Redes" | "Todos">(
+    initialType || initialDomain || initialQuery ? "Todos" : "Redes"
+  );
   const [activeTypes, setActiveTypes] = useState<string[]>(initialType ? [initialType] : []);
   // Red transversal activa: filtra por el dominio FUR de la entidad (megadocumento §3: 10 redes).
   const [activeDomain, setActiveDomain] = useState<DomainCode | null>(
@@ -55,11 +54,6 @@ function CatalogInner({
   }, []);
 
   const statuses = useMemo(() => ["Todos", ...Array.from(new Set((entities ?? []).map((e) => e.status))).sort()], [entities]);
-  const countByType = useMemo(() => {
-    const m = new Map<string, number>();
-    for (const e of entities ?? []) m.set(e.entityType, (m.get(e.entityType) ?? 0) + 1);
-    return m;
-  }, [entities]);
   const countByDomain = useMemo(() => {
     const m = new Map<string, number>();
     for (const e of entities ?? []) if (e.domain) m.set(e.domain, (m.get(e.domain) ?? 0) + 1);
@@ -74,13 +68,7 @@ function CatalogInner({
         e.title.toLowerCase().includes(q) ||
         e.furCode.toLowerCase().includes(q) ||
         e.subtitle.toLowerCase().includes(q);
-      const matchesTab =
-        activeTab === "Todos" ||
-        e.entityType === activeTab ||
-        (activeTab === "Redes" && e.entityType === "Red Transversal") ||
-        (activeTab === "Mapas" && e.entityType === "Sitio / Mapa") ||
-        (activeTab === "Documentos" && e.entityType === "Documento") ||
-        (activeTab === "Dashboards" && e.entityType === "Dashboard");
+      const matchesTab = activeTab === "Todos" || e.entityType === "Red Transversal";
       const matchesType = activeTypes.length === 0 || activeTypes.includes(e.entityType);
       const matchesDomain = !activeDomain || e.domain === activeDomain;
       const matchesStatus = status === "Todos" || e.status === status;
@@ -104,45 +92,6 @@ function CatalogInner({
       </div>
 
       <div className="container catalog-body">
-        <div className="catalog-summary panel">
-          <div>
-            <strong>{(entities?.length ?? 0).toLocaleString()}</strong>
-            <span>Entidades</span>
-          </div>
-          <div>
-            <strong>{results.length.toLocaleString()}</strong>
-            <span>Resultados</span>
-          </div>
-          <div>
-            <strong>{countByType.get("Proveedor") ?? 0}</strong>
-            <span>Proveedores</span>
-          </div>
-          <div>
-            <strong>{countByType.get("Documento") ?? 0}</strong>
-            <span>Documentos</span>
-          </div>
-          <Link to="/app/mapas" className="btn btn--navy">
-            <MapIcon size={15} /> Ver mapa interactivo
-          </Link>
-        </div>
-
-        <div className="catalog-tabs">
-          {TABS.map((t) => (
-            <button
-              key={t}
-              type="button"
-              className={"catalog-tab" + (activeTab === t ? " catalog-tab--active" : "")}
-              onClick={() => {
-                setActiveTab(t);
-                // Filtrar "las 10 redes" por una red no tiene sentido: al pedir la vista de redes se limpia ese filtro.
-                if (t === "Redes") setActiveDomain(null);
-              }}
-            >
-              {t}
-            </button>
-          ))}
-        </div>
-
         <div className="catalog-layout">
           <aside className="catalog-filters panel">
             <div className="catalog-filters__head">
