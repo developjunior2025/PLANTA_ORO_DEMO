@@ -377,6 +377,15 @@ p {
   box-shadow: inset 3px 0 0 var(--net-color);
 }
 
+.network-card:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.network-card:disabled:hover {
+  border-color: var(--color-gray-200);
+}
+
 .network-card__icon {
   width: 28px;
   height: 28px;

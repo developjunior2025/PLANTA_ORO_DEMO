@@ -36,7 +36,8 @@ export function FurListPage({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [domains.join(",")]);
 
-  const networks = useMemo(() => DOMAIN_LIST.filter((d) => domains.includes(d.code)), [domains]);
+  // Las 10 redes siempre se listan, aunque esta vista solo traiga fichas de algunas: el conteo real
+  // de las demás es 0 aquí porque sus fichas viven en otra página (Procesos, Laboratorio, Requisiciones…).
   const countByDomain = useMemo(() => {
     const m = new Map<string, number>();
     for (const r of records ?? []) m.set(r.domain, (m.get(r.domain) ?? 0) + 1);
@@ -99,36 +100,38 @@ export function FurListPage({
             onChange={(e) => setQuery(e.target.value)}
           />
 
-          {networks.length > 1 && (
-            <div className="catalog-filters__group">
-              <h4>
-                <Network size={14} /> Red transversal
-              </h4>
-              <p className="catalog-filters__hint">Solo lo que la planta tiene registrado en fichas FUR.</p>
-              <div className="catalog-filters__networks">
-                {networks.map((d) => (
-                  <button
-                    key={d.code}
-                    type="button"
-                    className={"network-card" + (activeDomain === d.code ? " network-card--active" : "")}
-                    style={{ ["--net-color" as string]: d.color }}
-                    onClick={() => setActiveDomain((cur) => (cur === d.code ? null : d.code))}
-                    aria-pressed={activeDomain === d.code}
-                  >
-                    <span className="network-card__icon" style={{ background: d.color }}>
-                      <NetworkIcon domain={d.code} size={16} color="#fff" />
-                    </span>
-                    <span className="network-card__body">
-                      <strong>
-                        {d.shortLabel} <span className="network-card__count">{countByDomain.get(d.code) ?? 0}</span>
-                      </strong>
-                      <span className="network-card__label">{d.label}</span>
-                    </span>
-                  </button>
-                ))}
-              </div>
+          <div className="catalog-filters__group">
+            <h4>
+              <Network size={14} /> 10 Redes Transversales
+            </h4>
+            <p className="catalog-filters__hint">
+              El conteo es de fichas dentro de esta vista; una red en 0 puede tener fichas en otra página.
+            </p>
+            <div className="catalog-filters__networks">
+              {DOMAIN_LIST.map((d) => (
+                <button
+                  key={d.code}
+                  type="button"
+                  className={"network-card" + (activeDomain === d.code ? " network-card--active" : "")}
+                  style={{ ["--net-color" as string]: d.color }}
+                  onClick={() => setActiveDomain((cur) => (cur === d.code ? null : d.code))}
+                  aria-pressed={activeDomain === d.code}
+                  disabled={!domains.includes(d.code)}
+                  title={!domains.includes(d.code) ? `${d.label}: fuera del alcance de "${title}"` : undefined}
+                >
+                  <span className="network-card__icon" style={{ background: d.color }}>
+                    <NetworkIcon domain={d.code} size={16} color="#fff" />
+                  </span>
+                  <span className="network-card__body">
+                    <strong>
+                      {d.shortLabel} <span className="network-card__count">{countByDomain.get(d.code) ?? 0}</span>
+                    </strong>
+                    <span className="network-card__label">{d.label}</span>
+                  </span>
+                </button>
+              ))}
             </div>
-          )}
+          </div>
 
           {zones.length > 0 && (
             <div className="catalog-filters__group">
