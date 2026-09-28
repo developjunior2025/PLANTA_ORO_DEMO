@@ -8,7 +8,8 @@ import { NetworkIcon } from "../components/ui/NetworkIcon";
 import { DOMAIN_LIST } from "../shared/domains";
 import type { CatalogEntity, DomainCode } from "../shared/types";
 
-const TABS = ["Todos", "Activos Físicos", "Procesos", "Servicio", "Documentos", "Laboratorio", "Dashboards", "Redes", "Mapas"];
+// "Redes" va primero: es la vista con la que abre el catálogo (las 10 redes transversales).
+const TABS = ["Redes", "Todos", "Activos Físicos", "Procesos", "Servicio", "Documentos", "Laboratorio", "Dashboards", "Mapas"];
 
 export function CatalogPage() {
   const [params] = useSearchParams();
@@ -33,7 +34,9 @@ function CatalogInner({
   initialDomain: DomainCode | null;
 }) {
   const [query, setQuery] = useState(initialQuery);
-  const [activeTab, setActiveTab] = useState("Todos");
+  // Al entrar sin buscar ni filtrar nada, la vista principal es la de las 10 redes, no la mezcla de
+  // proveedores/personas/servicios/etc. Si se llega con una búsqueda o un tipo desde el header, se ve esa.
+  const [activeTab, setActiveTab] = useState(initialType || initialDomain || initialQuery ? "Todos" : "Redes");
   const [activeTypes, setActiveTypes] = useState<string[]>(initialType ? [initialType] : []);
   // Red transversal activa: filtra por el dominio FUR de la entidad (megadocumento §3: 10 redes).
   const [activeDomain, setActiveDomain] = useState<DomainCode | null>(
@@ -129,7 +132,11 @@ function CatalogInner({
               key={t}
               type="button"
               className={"catalog-tab" + (activeTab === t ? " catalog-tab--active" : "")}
-              onClick={() => setActiveTab(t)}
+              onClick={() => {
+                setActiveTab(t);
+                // Filtrar "las 10 redes" por una red no tiene sentido: al pedir la vista de redes se limpia ese filtro.
+                if (t === "Redes") setActiveDomain(null);
+              }}
             >
               {t}
             </button>
@@ -149,7 +156,7 @@ function CatalogInner({
                   setActiveDomain(null);
                   setQuery("");
                   setStatus("Todos");
-                  setActiveTab("Todos");
+                  setActiveTab("Redes");
                 }}
               >
                 Limpiar
@@ -184,7 +191,11 @@ function CatalogInner({
                     type="button"
                     className={"network-card" + (activeDomain === d.code ? " network-card--active" : "")}
                     style={{ ["--net-color" as string]: d.color }}
-                    onClick={() => setActiveDomain((cur) => (cur === d.code ? null : d.code))}
+                    onClick={() => {
+                      // Filtrar por red muestra las entidades de esa red: sale de la vista de las 10 tarjetas.
+                      setActiveDomain((cur) => (cur === d.code ? null : d.code));
+                      setActiveTab("Todos");
+                    }}
                     aria-pressed={activeDomain === d.code}
                   >
                     <span className="network-card__icon" style={{ background: d.color }}>
