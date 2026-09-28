@@ -35,11 +35,6 @@ function CatalogInner({
   initialStage: string | null;
 }) {
   const [query, setQuery] = useState(initialQuery);
-  // Vista principal: "Redes" (las 10 redes transversales) o "Todos" (entidades) cuando se llega
-  // con una búsqueda/tipo desde el header o se elige una red/etapa en el panel lateral.
-  const [activeTab, setActiveTab] = useState<"Redes" | "Todos">(
-    initialType || initialDomain || initialStage || initialQuery ? "Todos" : "Redes"
-  );
   const [activeTypes, setActiveTypes] = useState<string[]>(initialType ? [initialType] : []);
   // Red transversal activa: filtra por el dominio FUR de la entidad (megadocumento §3: 10 redes).
   const [activeDomain, setActiveDomain] = useState<DomainCode | null>(
@@ -81,17 +76,19 @@ function CatalogInner({
         e.title.toLowerCase().includes(q) ||
         e.furCode.toLowerCase().includes(q) ||
         e.subtitle.toLowerCase().includes(q);
-      const matchesTab = activeTab === "Todos" || e.entityType === "Red Transversal";
+      // Las 10 "Red de X" son navegación (viven en el filtro de la izquierda), nunca resultados:
+      // el catálogo siempre muestra activos reales, filtrados por lo que se elija a la izquierda.
+      const isRealAsset = e.entityType !== "Red Transversal";
       const matchesType = activeTypes.length === 0 || activeTypes.includes(e.entityType);
       const matchesDomain = !activeDomain || e.domain === activeDomain;
       const matchesStage = !activeStage || e.zone === activeStage;
       const matchesStatus = status === "Todos" || e.status === status;
-      return matchesQuery && matchesTab && matchesType && matchesDomain && matchesStage && matchesStatus;
+      return matchesQuery && isRealAsset && matchesType && matchesDomain && matchesStage && matchesStatus;
     });
     if (sort === "nombre") return [...filtered].sort((a, b) => a.title.localeCompare(b.title, "es"));
     if (sort === "calificacion") return [...filtered].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
     return filtered;
-  }, [entities, query, activeTab, activeTypes, activeDomain, activeStage, status, sort]);
+  }, [entities, query, activeTypes, activeDomain, activeStage, status, sort]);
 
   return (
     <div className="catalog">
@@ -120,7 +117,6 @@ function CatalogInner({
                   setActiveStage(null);
                   setQuery("");
                   setStatus("Todos");
-                  setActiveTab("Redes");
                 }}
               >
                 Limpiar
@@ -155,11 +151,7 @@ function CatalogInner({
                     type="button"
                     className={"network-card" + (activeDomain === d.code ? " network-card--active" : "")}
                     style={{ ["--net-color" as string]: d.color }}
-                    onClick={() => {
-                      // Filtrar por red muestra las entidades de esa red: sale de la vista de las 10 tarjetas.
-                      setActiveDomain((cur) => (cur === d.code ? null : d.code));
-                      setActiveTab("Todos");
-                    }}
+                    onClick={() => setActiveDomain((cur) => (cur === d.code ? null : d.code))}
                     aria-pressed={activeDomain === d.code}
                   >
                     <span className="network-card__icon" style={{ background: d.color }}>
@@ -185,11 +177,7 @@ function CatalogInner({
               <select
                 className="catalog-filters__select"
                 value={activeStage ?? ""}
-                onChange={(e) => {
-                  const v = e.target.value || null;
-                  setActiveStage(v);
-                  if (v) setActiveTab("Todos");
-                }}
+                onChange={(e) => setActiveStage(e.target.value || null)}
               >
                 <option value="">Todas las etapas</option>
                 {STAGES.map((s) => (
