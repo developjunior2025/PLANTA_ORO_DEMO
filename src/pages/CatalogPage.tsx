@@ -8,21 +8,6 @@ import { NetworkIcon } from "../components/ui/NetworkIcon";
 import { DOMAIN_LIST } from "../shared/domains";
 import type { CatalogEntity, DomainCode } from "../shared/types";
 
-const TYPE_FILTERS = [
-  "Activos Físicos",
-  "Procesos",
-  "Personas",
-  "Servicio",
-  "Proveedor",
-  "Curso (LMS)",
-  "Documento",
-  "Inventario (WMS)",
-  "Laboratorio",
-  "Dashboard",
-  "Red Transversal",
-  "Sitio / Mapa",
-];
-
 const TABS = ["Todos", "Activos Físicos", "Procesos", "Servicio", "Documentos", "Laboratorio", "Dashboards", "Redes", "Mapas"];
 
 export function CatalogPage() {
@@ -65,10 +50,6 @@ function CatalogInner({
       active = false;
     };
   }, []);
-
-  function toggleType(t: string) {
-    setActiveTypes((prev) => (prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]));
-  }
 
   const statuses = useMemo(() => ["Todos", ...Array.from(new Set((entities ?? []).map((e) => e.status))).sort()], [entities]);
   const countByType = useMemo(() => {
@@ -142,30 +123,6 @@ function CatalogInner({
           </Link>
         </div>
 
-        <div className="catalog-networks panel">
-          <h3>
-            <Network size={15} /> 10 Redes Transversales del Ecosistema FUR
-          </h3>
-          <p>Filtra el catálogo por la red a la que pertenece cada activo, proceso o entidad.</p>
-          <div className="catalog-networks__grid">
-            {DOMAIN_LIST.map((d) => (
-              <button
-                key={d.code}
-                type="button"
-                className={"fur-net-chip fur-net-chip--btn" + (activeDomain === d.code ? " fur-net-chip--active" : "")}
-                style={{ ["--net-color" as string]: d.color }}
-                onClick={() => setActiveDomain((cur) => (cur === d.code ? null : d.code))}
-                aria-pressed={activeDomain === d.code}
-                title={d.description}
-              >
-                <NetworkIcon domain={d.code} size={15} color={activeDomain === d.code ? "#fff" : d.color} />
-                {d.shortLabel}
-                <span className="fur-net-chip__count">{countByDomain.get(d.code) ?? 0}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
         <div className="catalog-tabs">
           {TABS.map((t) => (
             <button
@@ -206,15 +163,43 @@ function CatalogInner({
               onChange={(e) => setQuery(e.target.value)}
             />
 
+            {activeTypes.length > 0 && (
+              <div className="catalog-filters__active-type">
+                Buscando en: <strong>{activeTypes[0]}</strong>
+                <button type="button" onClick={() => setActiveTypes([])} aria-label={`Quitar filtro ${activeTypes[0]}`}>
+                  ×
+                </button>
+              </div>
+            )}
+
             <div className="catalog-filters__group">
-              <h4>Tipo de Entidad</h4>
-              {TYPE_FILTERS.map((t) => (
-                <label key={t} className="catalog-filters__checkbox">
-                  <input type="checkbox" checked={activeTypes.includes(t)} onChange={() => toggleType(t)} />
-                  {t}
-                  <span className="catalog-filters__count">{countByType.get(t) ?? 0}</span>
-                </label>
-              ))}
+              <h4>
+                <Network size={14} /> 10 Redes Transversales
+              </h4>
+              <p className="catalog-filters__hint">A qué red pertenece cada activo, proceso o entidad.</p>
+              <div className="catalog-filters__networks">
+                {DOMAIN_LIST.map((d) => (
+                  <button
+                    key={d.code}
+                    type="button"
+                    className={"network-card" + (activeDomain === d.code ? " network-card--active" : "")}
+                    style={{ ["--net-color" as string]: d.color }}
+                    onClick={() => setActiveDomain((cur) => (cur === d.code ? null : d.code))}
+                    aria-pressed={activeDomain === d.code}
+                  >
+                    <span className="network-card__icon" style={{ background: d.color }}>
+                      <NetworkIcon domain={d.code} size={16} color="#fff" />
+                    </span>
+                    <span className="network-card__body">
+                      <strong>
+                        {d.shortLabel} <span className="network-card__count">{countByDomain.get(d.code) ?? 0}</span>
+                      </strong>
+                      <span className="network-card__label">{d.label}</span>
+                      <span className="network-card__desc">{d.description}</span>
+                    </span>
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="catalog-filters__group">
