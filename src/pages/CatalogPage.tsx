@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { Map as MapIcon, SlidersHorizontal } from "lucide-react";
+import { Map as MapIcon, Network, SlidersHorizontal } from "lucide-react";
 import "./CatalogPage.css";
 import { fetchCatalog } from "../shared/api";
 import { EntityCard } from "../components/ui/EntityCard";
-import type { CatalogEntity } from "../shared/types";
+import { NetworkIcon } from "../components/ui/NetworkIcon";
+import { DOMAIN_LIST } from "../shared/domains";
+import type { CatalogEntity, DomainCode } from "../shared/types";
 
 const TYPE_FILTERS = [
   "Activos Físicos",
@@ -25,14 +27,33 @@ const TABS = ["Todos", "Activos Físicos", "Procesos", "Servicio", "Documentos",
 
 export function CatalogPage() {
   const [params] = useSearchParams();
-  // key remonta el catálogo cuando cambia la búsqueda desde el header (?q=, ?tipo=).
-  return <CatalogInner key={params.toString()} initialQuery={params.get("q") ?? ""} initialType={params.get("tipo")} />;
+  // key remonta el catálogo cuando cambia la búsqueda desde el header (?q=, ?tipo=, ?red=).
+  return (
+    <CatalogInner
+      key={params.toString()}
+      initialQuery={params.get("q") ?? ""}
+      initialType={params.get("tipo")}
+      initialDomain={params.get("red") as DomainCode | null}
+    />
+  );
 }
 
-function CatalogInner({ initialQuery, initialType }: { initialQuery: string; initialType: string | null }) {
+function CatalogInner({
+  initialQuery,
+  initialType,
+  initialDomain,
+}: {
+  initialQuery: string;
+  initialType: string | null;
+  initialDomain: DomainCode | null;
+}) {
   const [query, setQuery] = useState(initialQuery);
   const [activeTab, setActiveTab] = useState("Todos");
   const [activeTypes, setActiveTypes] = useState<string[]>(initialType ? [initialType] : []);
+  // Red transversal activa: filtra por el dominio FUR de la entidad (megadocumento §3: 10 redes).
+  const [activeDomain, setActiveDomain] = useState<DomainCode | null>(
+    initialDomain && DOMAIN_LIST.some((d) => d.code === initialDomain) ? initialDomain : null
+  );
   const [status, setStatus] = useState("Todos");
   const [sort, setSort] = useState("relevancia");
   const [entities, setEntities] = useState<CatalogEntity[] | null>(null);
@@ -55,6 +76,11 @@ function CatalogInner({ initialQuery, initialType }: { initialQuery: string; ini
     for (const e of entities ?? []) m.set(e.entityType, (m.get(e.entityType) ?? 0) + 1);
     return m;
   }, [entities]);
+  const countByDomain = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const e of entities ?? []) if (e.domain) m.set(e.domain, (m.get(e.domain) ?? 0) + 1);
+    return m;
+  }, [entities]);
 
   const results = useMemo(() => {
     const filtered = (entities ?? []).filter((e) => {
@@ -72,13 +98,14 @@ function CatalogInner({ initialQuery, initialType }: { initialQuery: string; ini
         (activeTab === "Documentos" && e.entityType === "Documento") ||
         (activeTab === "Dashboards" && e.entityType === "Dashboard");
       const matchesType = activeTypes.length === 0 || activeTypes.includes(e.entityType);
+      const matchesDomain = !activeDomain || e.domain === activeDomain;
       const matchesStatus = status === "Todos" || e.status === status;
-      return matchesQuery && matchesTab && matchesType && matchesStatus;
+      return matchesQuery && matchesTab && matchesType && matchesDomain && matchesStatus;
     });
     if (sort === "nombre") return [...filtered].sort((a, b) => a.title.localeCompare(b.title, "es"));
     if (sort === "calificacion") return [...filtered].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
     return filtered;
-  }, [entities, query, activeTab, activeTypes, status, sort]);
+  }, [entities, query, activeTab, activeTypes, activeDomain, status, sort]);
 
   return (
     <div className="catalog">
@@ -115,6 +142,30 @@ function CatalogInner({ initialQuery, initialType }: { initialQuery: string; ini
           </Link>
         </div>
 
+        <div className="catalog-networks panel">
+          <h3>
+            <Network size={15} /> 10 Redes Transversales del Ecosistema FUR
+          </h3>
+          <p>Filtra el catálogo por la red a la que pertenece cada activo, proceso o entidad.</p>
+          <div className="catalog-networks__grid">
+            {DOMAIN_LIST.map((d) => (
+              <button
+                key={d.code}
+                type="button"
+                className={"fur-net-chip fur-net-chip--btn" + (activeDomain === d.code ? " fur-net-chip--active" : "")}
+                style={{ ["--net-color" as string]: d.color }}
+                onClick={() => setActiveDomain((cur) => (cur === d.code ? null : d.code))}
+                aria-pressed={activeDomain === d.code}
+                title={d.description}
+              >
+                <NetworkIcon domain={d.code} size={15} color={activeDomain === d.code ? "#fff" : d.color} />
+                {d.shortLabel}
+                <span className="fur-net-chip__count">{countByDomain.get(d.code) ?? 0}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="catalog-tabs">
           {TABS.map((t) => (
             <button
@@ -138,6 +189,7 @@ function CatalogInner({ initialQuery, initialType }: { initialQuery: string; ini
                 type="button"
                 onClick={() => {
                   setActiveTypes([]);
+                  setActiveDomain(null);
                   setQuery("");
                   setStatus("Todos");
                   setActiveTab("Todos");

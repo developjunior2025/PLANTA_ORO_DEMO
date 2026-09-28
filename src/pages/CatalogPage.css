@@ -49,6 +49,32 @@
   margin-left: auto;
 }
 
+.catalog-networks {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.catalog-networks h3 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--color-navy-900);
+}
+
+.catalog-networks p {
+  font-size: 12px;
+  color: var(--color-gray-500);
+  margin-bottom: 6px;
+}
+
+.catalog-networks__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .catalog-tabs {
   display: flex;
   gap: 4px;

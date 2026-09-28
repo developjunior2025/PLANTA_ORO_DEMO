@@ -236,16 +236,20 @@ function FurDetailInner({ furCode }: { furCode: string }) {
         <h3>
           <Network size={15} /> 10 Redes Transversales del Ecosistema FUR
         </h3>
+        <p className="fur-detail__networks-hint">
+          Esta ficha pertenece a <strong>{domain.label}</strong>. Toca otra red para ver el catálogo filtrado por ella.
+        </p>
         <div className="fur-detail__networks-grid">
           {DOMAIN_LIST.map((d) => (
-            <span
+            <Link
               key={d.code}
+              to={`/app/catalogo?red=${d.code}`}
               className={"fur-net-chip" + (d.code === domain.code ? " fur-net-chip--active" : "")}
               style={{ ["--net-color" as string]: d.color }}
             >
               <NetworkIcon domain={d.code} size={15} color={d.code === domain.code ? "#fff" : d.color} />
               {d.shortLabel}
-            </span>
+            </Link>
           ))}
         </div>
       </div>
