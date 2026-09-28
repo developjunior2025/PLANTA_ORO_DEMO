@@ -1,22 +1,24 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Network, SlidersHorizontal } from "lucide-react";
+import { Layers, Network, SlidersHorizontal } from "lucide-react";
 import "./CatalogPage.css";
 import { fetchCatalog } from "../shared/api";
 import { EntityCard } from "../components/ui/EntityCard";
 import { NetworkIcon } from "../components/ui/NetworkIcon";
 import { DOMAIN_LIST } from "../shared/domains";
+import { STAGES } from "../shared/stages";
 import type { CatalogEntity, DomainCode } from "../shared/types";
 
 export function CatalogPage() {
   const [params] = useSearchParams();
-  // key remonta el catálogo cuando cambia la búsqueda desde el header (?q=, ?tipo=, ?red=).
+  // key remonta el catálogo cuando cambia la búsqueda desde el header (?q=, ?tipo=, ?red=, ?etapa=).
   return (
     <CatalogInner
       key={params.toString()}
       initialQuery={params.get("q") ?? ""}
       initialType={params.get("tipo")}
       initialDomain={params.get("red") as DomainCode | null}
+      initialStage={params.get("etapa")}
     />
   );
 }
@@ -25,21 +27,27 @@ function CatalogInner({
   initialQuery,
   initialType,
   initialDomain,
+  initialStage,
 }: {
   initialQuery: string;
   initialType: string | null;
   initialDomain: DomainCode | null;
+  initialStage: string | null;
 }) {
   const [query, setQuery] = useState(initialQuery);
   // Vista principal: "Redes" (las 10 redes transversales) o "Todos" (entidades) cuando se llega
-  // con una búsqueda/tipo desde el header o se elige una red en el panel lateral.
+  // con una búsqueda/tipo desde el header o se elige una red/etapa en el panel lateral.
   const [activeTab, setActiveTab] = useState<"Redes" | "Todos">(
-    initialType || initialDomain || initialQuery ? "Todos" : "Redes"
+    initialType || initialDomain || initialStage || initialQuery ? "Todos" : "Redes"
   );
   const [activeTypes, setActiveTypes] = useState<string[]>(initialType ? [initialType] : []);
   // Red transversal activa: filtra por el dominio FUR de la entidad (megadocumento §3: 10 redes).
   const [activeDomain, setActiveDomain] = useState<DomainCode | null>(
     initialDomain && DOMAIN_LIST.some((d) => d.code === initialDomain) ? initialDomain : null
+  );
+  // Etapa activa de la cadena productiva maestra (D01–D18).
+  const [activeStage, setActiveStage] = useState<string | null>(
+    initialStage && STAGES.some((s) => s.code === initialStage) ? initialStage : null
   );
   const [status, setStatus] = useState("Todos");
   const [sort, setSort] = useState("relevancia");
@@ -59,6 +67,11 @@ function CatalogInner({
     for (const e of entities ?? []) if (e.domain) m.set(e.domain, (m.get(e.domain) ?? 0) + 1);
     return m;
   }, [entities]);
+  const countByStage = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const e of entities ?? []) if (e.zone) m.set(e.zone, (m.get(e.zone) ?? 0) + 1);
+    return m;
+  }, [entities]);
 
   const results = useMemo(() => {
     const filtered = (entities ?? []).filter((e) => {
@@ -71,13 +84,14 @@ function CatalogInner({
       const matchesTab = activeTab === "Todos" || e.entityType === "Red Transversal";
       const matchesType = activeTypes.length === 0 || activeTypes.includes(e.entityType);
       const matchesDomain = !activeDomain || e.domain === activeDomain;
+      const matchesStage = !activeStage || e.zone === activeStage;
       const matchesStatus = status === "Todos" || e.status === status;
-      return matchesQuery && matchesTab && matchesType && matchesDomain && matchesStatus;
+      return matchesQuery && matchesTab && matchesType && matchesDomain && matchesStage && matchesStatus;
     });
     if (sort === "nombre") return [...filtered].sort((a, b) => a.title.localeCompare(b.title, "es"));
     if (sort === "calificacion") return [...filtered].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
     return filtered;
-  }, [entities, query, activeTab, activeTypes, activeDomain, status, sort]);
+  }, [entities, query, activeTab, activeTypes, activeDomain, activeStage, status, sort]);
 
   return (
     <div className="catalog">
@@ -103,6 +117,7 @@ function CatalogInner({
                 onClick={() => {
                   setActiveTypes([]);
                   setActiveDomain(null);
+                  setActiveStage(null);
                   setQuery("");
                   setStatus("Todos");
                   setActiveTab("Redes");
@@ -160,6 +175,29 @@ function CatalogInner({
                   </button>
                 ))}
               </div>
+            </div>
+
+            <div className="catalog-filters__group">
+              <h4>
+                <Layers size={14} /> Etapa (cadena productiva)
+              </h4>
+              <p className="catalog-filters__hint">Las 18 etapas D01–D18. La mayoría todavía no tiene fichas cargadas.</p>
+              <select
+                className="catalog-filters__select"
+                value={activeStage ?? ""}
+                onChange={(e) => {
+                  const v = e.target.value || null;
+                  setActiveStage(v);
+                  if (v) setActiveTab("Todos");
+                }}
+              >
+                <option value="">Todas las etapas</option>
+                {STAGES.map((s) => (
+                  <option key={s.code} value={s.code}>
+                    D{s.code} — {s.label} ({countByStage.get(s.code) ?? 0})
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="catalog-filters__group">

@@ -50,6 +50,8 @@ model CatalogEntity {
   furCode    String  @unique
   entityType String
   domain     String?
+  // Etapa de la cadena productiva maestra (D01-D18, documento maestro): solo aplica a activos/procesos.
+  zone       String?
   title      String
   subtitle   String
   meta       Json

@@ -96,6 +96,8 @@ export interface CatalogEntity {
   furCode: string;
   entityType: string;
   domain?: DomainCode;
+  /** Etapa de la cadena productiva maestra (código "01".."18"), solo para activos/procesos. */
+  zone?: string | null;
   title: string;
   subtitle: string;
   meta: string[];

@@ -449,8 +449,8 @@ export const FUR_RECORDS = [
 ];
 
 export const CATALOG_ENTITIES = [
-  { furCode: "FUR-ACT-000123", entityType: "Activos Físicos", domain: "PTE", title: "Bomba de Pulpa Warman 6/4", subtitle: "FUR-ACT-000123", meta: ["Área: Molienda", "Planta: REVMIN II"], status: "Operativo", image: placeholderImg("photo-1518709268805-4e9042af2176") },
-  { furCode: "FUR-PRO-000045", entityType: "Procesos", domain: "PROC", title: "Proceso de Lixiviación con Carbón Activado", subtitle: "FUR-PRO-000045", meta: ["Planta: REVMIN II"], status: "Operativo", image: placeholderImg("photo-1581093588401-fbb62a02f120") },
+  { furCode: "FUR-ACT-000123", entityType: "Activos Físicos", domain: "PTE", zone: "06", title: "Bomba de Pulpa Warman 6/4", subtitle: "FUR-ACT-000123", meta: ["Área: Molienda", "Planta: REVMIN II"], status: "Operativo", image: placeholderImg("photo-1518709268805-4e9042af2176") },
+  { furCode: "FUR-PRO-000045", entityType: "Procesos", domain: "PROC", zone: "11", title: "Proceso de Lixiviación con Carbón Activado", subtitle: "FUR-PRO-000045", meta: ["Planta: REVMIN II"], status: "Operativo", image: placeholderImg("photo-1581093588401-fbb62a02f120") },
   { furCode: "FUR-SER-000078", entityType: "Servicio", domain: null, title: "Servicio de Mantenimiento Predictivo", subtitle: "Proveedor: Tecnomin C.A.", meta: ["Desde USD 1,500"], status: "Disponible", image: placeholderImg("photo-1581091870621-1d6a5a3f0e6f"), price: "Desde USD 1,500", rating: 4.8 },
   { furCode: "FUR-CUR-000210", entityType: "Curso (LMS)", domain: null, title: "Operación de Planta de Beneficio de Oro", subtitle: "Proveedor: FUR Academy", meta: ["USD 49", "120 estudiantes"], status: "Disponible", image: placeholderImg("photo-1523240795612-9a054b0db644"), price: "USD 49", rating: 4.9 },
   { furCode: "FUR-DOC-000567", entityType: "Documento", domain: null, title: "Plano P&ID - Área de Molienda", subtitle: "Tipo: Plano / Formato: PDF", meta: ["v2.1", "12-09-2026"], status: "Certificado", image: placeholderImg("photo-1581092335878-02b3b2b2e7f2") },

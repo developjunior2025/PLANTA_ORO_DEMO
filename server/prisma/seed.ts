@@ -61,21 +61,24 @@ async function main() {
 
   console.log("Seeding catalog_entities...");
   for (const e of CATALOG_ENTITIES) {
+    // A diferencia de fur_records/stock_items (editables desde la app: no se pisan aquí), el catálogo
+    // no tiene CRUD propio, así que su contenido siempre se sincroniza con el seed.
+    const data = {
+      entityType: e.entityType,
+      domain: e.domain,
+      zone: "zone" in e ? e.zone : null,
+      title: e.title,
+      subtitle: e.subtitle,
+      meta: e.meta,
+      status: e.status,
+      image: `/placeholders/${e.domain ?? "GEN"}.svg`,
+      price: e.price,
+      rating: e.rating,
+    };
     await prisma.catalogEntity.upsert({
       where: { furCode: e.furCode },
-      create: {
-        furCode: e.furCode,
-        entityType: e.entityType,
-        domain: e.domain,
-        title: e.title,
-        subtitle: e.subtitle,
-        meta: e.meta,
-        status: e.status,
-        image: `/placeholders/${e.domain ?? "GEN"}.svg`,
-        price: e.price,
-        rating: e.rating,
-      },
-      update: {},
+      create: { furCode: e.furCode, ...data },
+      update: data,
     });
   }
 
