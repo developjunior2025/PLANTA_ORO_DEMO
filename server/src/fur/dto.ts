@@ -30,6 +30,10 @@ export class CreateFurDto {
   @IsIn(DOMAINS)
   domain!: string;
 
+  @IsOptional()
+  @IsString()
+  plantCode?: string;
+
   @IsString()
   name!: string;
 

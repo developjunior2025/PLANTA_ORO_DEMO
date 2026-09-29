@@ -16,9 +16,12 @@ export class FurService {
     return this.prisma.furRecord.findUnique({ where: { furCode } });
   }
 
-  findList(domains?: string[]) {
+  findList(domains?: string[], plant?: string) {
     return this.prisma.furRecord.findMany({
-      where: domains && domains.length > 0 ? { domain: { in: domains } } : undefined,
+      where: {
+        ...(domains && domains.length > 0 ? { domain: { in: domains } } : {}),
+        ...(plant ? { plantCode: plant } : {}),
+      },
       orderBy: { furCode: "asc" },
     });
   }
@@ -38,6 +41,7 @@ export class FurService {
       data: {
         furCode: dto.furCode,
         uuid: randomUUID(),
+        plantCode: dto.plantCode ?? "PB01",
         domain: dto.domain,
         name: dto.name,
         family: dto.family,

@@ -8,6 +8,7 @@ import { PrismaClient, Prisma } from "@prisma/client";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import {
+  PLANTS,
   FUR_RECORDS,
   EXTRA_FUR_RECORDS,
   CATALOG_ENTITIES,
@@ -25,12 +26,18 @@ import {
 const prisma = new PrismaClient();
 
 async function main() {
+  console.log("Seeding plants...");
+  for (const pl of PLANTS) {
+    await prisma.plant.upsert({ where: { code: pl.code }, create: pl, update: pl });
+  }
+
   console.log("Seeding fur_records...");
   for (const r of [...FUR_RECORDS, ...EXTRA_FUR_RECORDS]) {
     // Contenido de la demo (nombre, zona, etapa, documentación...): se sincroniza en cada seed.
     // status/criticality/maturity/dataQualityPercent/holds son editables desde la app real (CRUD de
     // la ficha FUR) y no se tocan si la ficha ya existe, para no pisar ediciones hechas en el sitio.
     const demoContent = {
+      plantCode: r.plantCode,
       domain: r.domain,
       name: r.name,
       family: r.family,
@@ -72,6 +79,7 @@ async function main() {
     // no tiene CRUD propio, así que su contenido siempre se sincroniza con el seed.
     const data = {
       entityType: e.entityType,
+      plantCode: "plantCode" in e ? e.plantCode : null,
       domain: e.domain,
       zone: "zone" in e ? e.zone : null,
       title: e.title,

@@ -6,6 +6,7 @@ import { fetchFurList } from "../shared/api";
 import { DOMAINS } from "../shared/domains";
 import { NetworkIcon } from "../components/ui/NetworkIcon";
 import { StatusBadge } from "../components/ui/Badges";
+import { filterByPlant, useActivePlant, usePlants } from "../shared/plantStore";
 import type { FurRecord } from "../shared/types";
 
 export function MapPage() {
@@ -13,6 +14,9 @@ export function MapPage() {
   const [params] = useSearchParams();
   const focusCode = params.get("fur");
   const [openZone, setOpenZone] = useState<string | null>(null);
+  const activePlant = useActivePlant();
+  const plants = usePlants();
+  const activePlantName = plants?.find((p) => p.code === activePlant)?.name ?? activePlant;
 
   useEffect(() => {
     let active = true;
@@ -24,19 +28,22 @@ export function MapPage() {
     };
   }, []);
 
+  // La planta activa (selector del header) filtra el árbol: Planta → Zona → Activo.
+  const plantRecords = useMemo(() => (records ? filterByPlant(records, activePlant) : null), [records, activePlant]);
+
   // Zona a abrir: la que eligió el usuario, o la del activo enlazado desde su ficha (?fur=).
-  const focusZone = records?.find((r) => r.furCode === focusCode)?.zone ?? null;
+  const focusZone = plantRecords?.find((r) => r.furCode === focusCode)?.zone ?? null;
   const shownZone = openZone ?? focusZone;
 
   const byZone = useMemo(() => {
     const map = new Map<string, FurRecord[]>();
-    for (const r of records ?? []) {
+    for (const r of plantRecords ?? []) {
       const list = map.get(r.zone) ?? [];
       list.push(r);
       map.set(r.zone, list);
     }
     return Array.from(map.entries()).sort(([a], [b]) => a.localeCompare(b));
-  }, [records]);
+  }, [plantRecords]);
 
   return (
     <div className="map-page container">
@@ -46,11 +53,12 @@ export function MapPage() {
           Navegación Planta → Área → Activo / FUR (Etapa 11 / sección 3.2.E). La librería GIS
           definitiva queda como <strong>ADR-004 pendiente</strong> — este prototipo representa la
           jerarquía como árbol navegable en vez de un mapa geográfico real, para no simular datos
-          de georreferenciación que no existen todavía.
+          de georreferenciación que no existen todavía. Mostrando: <strong>{activePlantName}</strong> (cámbiala
+          desde el selector de planta del header).
         </p>
       </div>
 
-      {!records ? (
+      {!plantRecords ? (
         <div className="skeleton-block" style={{ height: 320 }} aria-busy="true" />
       ) : (
         <div className="panel map-page__tree">

@@ -17,6 +17,7 @@ import { COMMON_SECTIONS, widgetsForSection } from "../dashboards/sectionRules";
 import { matchDefinition } from "../dashboards/kpiMatch";
 import { filtersKey, useDashboardFilters } from "../dashboards/filters";
 import { useDashboardMeta } from "../dashboards/useDashboardMeta";
+import { usePlants, useActivePlant } from "../shared/plantStore";
 import "../dashboards/widgets.css";
 import "../dashboards/DashboardShell.css";
 
@@ -44,7 +45,13 @@ function DashboardView({ spec }: { spec: DashboardSpec }) {
   const toggleFav = useFavorites((s) => s.toggleDashboard);
   const { filters, setFilter, clear, setSection, active, section } = useDashboardFilters();
   const { meta } = useDashboardMeta(spec.slug);
-  const fk = filtersKey(filters);
+  const activePlant = useActivePlant();
+  const plants = usePlants();
+  const activePlantName = plants?.find((p) => p.code === activePlant)?.name ?? activePlant;
+  // La planta activa (selector del header) siempre se aplica a los datos, sin ser un filtro más de
+  // la barra: cambiar de planta ahí filtra el dashboard solo, sin tener que tocar nada aquí.
+  const queryFilters = { ...filters, plant: activePlant };
+  const fk = filtersKey(queryFilters);
 
   const [state, setState] = useState<KpiState | null>(null);
   const [loading, setLoading] = useState(false);
@@ -58,7 +65,7 @@ function DashboardView({ spec }: { spec: DashboardSpec }) {
   useEffect(() => {
     const ac = new AbortController();
     const run = () =>
-      Promise.all([fetchDashboardKpis(spec.slug, filters, ac.signal), fetchHealth()])
+      Promise.all([fetchDashboardKpis(spec.slug, queryFilters, ac.signal), fetchHealth()])
         .then(([k, h]) => {
           setState((cur) => ({ key: fk, kpis: k, prev: cur && cur.key === fk ? cur.kpis : null }));
           setLatency(h.ms);
@@ -100,7 +107,7 @@ function DashboardView({ spec }: { spec: DashboardSpec }) {
 
   const realCount = kpis ? spec.kpis.filter((k) => readKpi(k, kpis).prov === "real").length : 0;
   const isMine = role.dashboardSlug === spec.slug;
-  const ctx = { slug: spec.slug, kpis, filters };
+  const ctx = { slug: spec.slug, kpis, filters: queryFilters };
   const dq = kpis?.data_quality.condition;
 
   const exportCsv = async () => {
@@ -117,7 +124,7 @@ function DashboardView({ spec }: { spec: DashboardSpec }) {
     a.click();
     URL.revokeObjectURL(a.href);
     try {
-      await logDashboardExport(spec.slug, "KPIs del dashboard", filters, role.label);
+      await logDashboardExport(spec.slug, "KPIs del dashboard", queryFilters, role.label);
       setExportMsg("CSV descargado y registrado en auditoría.");
     } catch {
       setExportMsg("CSV descargado, pero no se pudo registrar en auditoría (backend sin conexión).");
@@ -190,7 +197,7 @@ function DashboardView({ spec }: { spec: DashboardSpec }) {
 
         <div className="dash-head__facts">
           <span className="fact-chip">Período: {period}</span>
-          <span className="fact-chip">Planta: PB01 · Planta de Beneficio de Oro</span>
+          <span className="fact-chip">Planta: {activePlant} · {activePlantName}</span>
           {filters.area && <span className="fact-chip">Área: {filters.area}</span>}
           {filters.stage && <span className="fact-chip">Zona: {filters.stage}</span>}
           <span className={`fact-chip ${error ? "fact-chip--bad" : latency !== null ? "fact-chip--ok" : ""}`}>
@@ -275,7 +282,7 @@ function DashboardView({ spec }: { spec: DashboardSpec }) {
           kpi={spec.kpis[detail]}
           kpis={kpis}
           definition={meta ? matchDefinition(spec.kpis[detail].label, meta.kpiDefinitions) : undefined}
-          filters={filters}
+          filters={queryFilters}
           dashboardCode={spec.code}
           onClose={() => setDetail(null)}
         />

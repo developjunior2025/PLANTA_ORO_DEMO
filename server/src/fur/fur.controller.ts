@@ -7,9 +7,9 @@ export class FurController {
   constructor(private readonly furService: FurService) {}
 
   @Get()
-  list(@Query("domain") domain?: string) {
+  list(@Query("domain") domain?: string, @Query("plant") plant?: string) {
     const domains = domain ? domain.split(",").map((d) => d.trim().toUpperCase()) : undefined;
-    return this.furService.findList(domains);
+    return this.furService.findList(domains, plant);
   }
 
   @Post()

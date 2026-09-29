@@ -84,19 +84,20 @@ class DashboardsService {
     return rows
       .filter((r) => matchesFilter(r, filter))
       .map((r) => ({
-        furCode: r.furCode, name: r.name, domain: r.domain, area: r.area, zone: r.zone, status: r.status,
-        criticality: r.criticality, maturity: r.maturity, dataQualityPercent: r.dataQualityPercent,
+        furCode: r.furCode, name: r.name, domain: r.domain, plantCode: r.plantCode, area: r.area, zone: r.zone,
+        status: r.status, criticality: r.criticality, maturity: r.maturity, dataQualityPercent: r.dataQualityPercent,
         holds: r.holds, condition: conditionOf(r),
       }));
   }
 
   async filterOptions() {
     const rows = await this.prisma.furRecord.findMany({
-      select: { domain: true, area: true, zone: true, criticality: true, status: true, maturity: true },
+      select: { domain: true, plantCode: true, area: true, zone: true, criticality: true, status: true, maturity: true },
     });
     const uniq = (f: (r: (typeof rows)[number]) => string) => [...new Set(rows.map(f))].sort();
     return {
       domain: uniq((r) => r.domain),
+      plant: uniq((r) => r.plantCode),
       area: uniq((r) => r.area),
       stage: uniq((r) => r.zone),
       criticality: uniq((r) => r.criticality),
@@ -104,7 +105,7 @@ class DashboardsService {
       maturity: uniq((r) => r.maturity),
       condition: ["Confirmado", "Referencial", "TBC", "HOLD"],
       // Sin dimensión cargada en los datos (megadocumento de dashboards §24, HOLD #13).
-      unsupported: ["planta (solo existe PB01)", "turno", "proveedor"],
+      unsupported: ["turno", "proveedor"],
     };
   }
 

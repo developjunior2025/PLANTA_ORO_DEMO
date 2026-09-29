@@ -5,6 +5,7 @@ import { fetchCatalog } from "../shared/api";
 import { EntityCard } from "../components/ui/EntityCard";
 import { NetworkIcon } from "../components/ui/NetworkIcon";
 import { DOMAIN_LIST } from "../shared/domains";
+import { filterCatalogByPlant, useActivePlant } from "../shared/plantStore";
 import type { CatalogEntity, DomainCode } from "../shared/types";
 
 export function EntityListPage({
@@ -21,6 +22,7 @@ export function EntityListPage({
   const [status, setStatus] = useState("Todos");
   const [sort, setSort] = useState("relevancia");
   const [entities, setEntities] = useState<CatalogEntity[] | null>(null);
+  const activePlant = useActivePlant();
 
   useEffect(() => {
     let active = true;
@@ -33,11 +35,13 @@ export function EntityListPage({
   }, []);
 
   // entityTypes es un array nuevo por render en literales inline; unirlo mantiene los memos estables.
+  // Cambiar de planta en el header filtra solo lo que sí pertenece a un sitio (ej. el activo físico
+  // mezclado en Marketplace); proveedores/personas/cursos/servicios no tienen planta y siempre se ven.
   const entityTypesKey = entityTypes.join(",");
   const scoped = useMemo(
-    () => (entities ?? []).filter((e) => entityTypes.includes(e.entityType)),
+    () => filterCatalogByPlant((entities ?? []).filter((e) => entityTypes.includes(e.entityType)), activePlant),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [entities, entityTypesKey]
+    [entities, entityTypesKey, activePlant]
   );
 
   const statuses = useMemo(() => Array.from(new Set(scoped.map((e) => e.status))).sort(), [scoped]);

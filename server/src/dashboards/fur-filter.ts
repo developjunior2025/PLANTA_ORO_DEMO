@@ -1,10 +1,11 @@
 /**
  * Filtros globales de dashboard (documento maestro de dashboards §4.2/§16) que sí se pueden aplicar
- * con los datos reales de FUR. Los filtros de planta única, turno y proveedor no tienen dimensión
- * cargada, así que no se ofrecen (ver `unsupported` en las respuestas).
+ * con los datos reales de FUR. El filtro de turno y proveedor no tiene dimensión cargada, así que no
+ * se ofrece (ver `unsupported` en las respuestas). Planta sí, desde que existe más de una (Plant).
  */
 export interface FurFilter {
   domain: string[];
+  plant?: string;
   area?: string;
   stage?: string;
   criticality?: string;
@@ -14,12 +15,13 @@ export interface FurFilter {
   q?: string;
 }
 
-export const FILTER_KEYS = ["domain", "area", "stage", "criticality", "status", "condition", "maturity", "q"] as const;
+export const FILTER_KEYS = ["domain", "plant", "area", "stage", "criticality", "status", "condition", "maturity", "q"] as const;
 
 export function parseFurFilter(query: Record<string, string | undefined>): FurFilter {
   const pick = (k: string) => (query[k] && query[k] !== "" ? query[k] : undefined);
   return {
     domain: pick("domain")?.split(",").filter(Boolean) ?? [],
+    plant: pick("plant"),
     area: pick("area"),
     stage: pick("stage"),
     criticality: pick("criticality"),
@@ -33,7 +35,7 @@ export function parseFurFilter(query: Record<string, string | undefined>): FurFi
 export function activeFilters(f: FurFilter): Record<string, string> {
   const out: Record<string, string> = {};
   if (f.domain.length) out.domain = f.domain.join(",");
-  for (const k of ["area", "stage", "criticality", "status", "condition", "maturity", "q"] as const) {
+  for (const k of ["plant", "area", "stage", "criticality", "status", "condition", "maturity", "q"] as const) {
     if (f[k]) out[k] = f[k]!;
   }
   return out;
@@ -46,6 +48,7 @@ export interface FilterableFur {
   furCode: string;
   name: string;
   domain: string;
+  plantCode: string;
   area: string;
   zone: string;
   criticality: string;
@@ -64,6 +67,7 @@ export function conditionOf(r: Pick<FilterableFur, "maturity" | "holds">): strin
 
 export function matchesFilter(r: FilterableFur, f: FurFilter): boolean {
   if (f.domain.length && !f.domain.includes(r.domain)) return false;
+  if (f.plant && r.plantCode !== f.plant) return false;
   if (f.area && r.area !== f.area) return false;
   if (f.stage && r.zone !== f.stage) return false;
   if (f.criticality && r.criticality !== f.criticality) return false;

@@ -14,10 +14,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Planta / sitio físico (megadocumento §4.2: filtro "planta"). El ecosistema puede operar más
+// de una planta de beneficio; cada ficha FUR y entidad del catálogo pertenece a una.
+model Plant {
+  id       String @id @default(uuid())
+  code     String @unique
+  name     String
+  location String
+}
+
 model FurRecord {
   id                 String   @id @default(uuid())
   furCode            String   @unique
   uuid               String   @unique
+  plantCode          String
   domain             String
   name               String
   family             String
@@ -46,12 +56,15 @@ model FurRecord {
   updatedAt          DateTime @updatedAt
 
   @@index([domain])
+  @@index([plantCode])
 }
 
 model CatalogEntity {
   id         String  @id @default(uuid())
   furCode    String  @unique
   entityType String
+  // Nula cuando la entidad no pertenece a una planta física (proveedor, curso, persona, servicio...).
+  plantCode  String?
   domain     String?
   // Etapa de la cadena productiva maestra (D01-D18, documento maestro): solo aplica a activos/procesos.
   zone       String?

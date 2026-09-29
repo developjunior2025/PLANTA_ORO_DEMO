@@ -4,6 +4,7 @@ import { Search, Heart, Bell, Mountain } from "lucide-react";
 import "./AppShell.css";
 import { UserMenu } from "./UserMenu";
 import { EcosystemMenu } from "./EcosystemMenu";
+import { PlantSelector } from "./PlantSelector";
 import { useFavorites } from "../../shared/favoritesStore";
 import { useAlerts } from "../../shared/alerts";
 
@@ -61,6 +62,8 @@ export function AppShell() {
               <small>Ecosistema Digital · Planta de Beneficio de Oro</small>
             </span>
           </Link>
+
+          <PlantSelector />
 
           <form className="app-header__search" onSubmit={onSearch}>
             <select aria-label="Categoría" value={category} onChange={(e) => setCategory(e.target.value)}>

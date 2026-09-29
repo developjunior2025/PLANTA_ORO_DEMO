@@ -6,6 +6,7 @@ import { FurCard } from "../components/ui/FurCard";
 import { NetworkIcon } from "../components/ui/NetworkIcon";
 import { DOMAIN_LIST } from "../shared/domains";
 import { STAGES } from "../shared/stages";
+import { filterByPlant, useActivePlant } from "../shared/plantStore";
 import type { AssetStatus, DomainCode, FurRecord } from "../shared/types";
 
 export function FurListPage({
@@ -24,6 +25,7 @@ export function FurListPage({
   const [activeStage, setActiveStage] = useState<string | null>(null);
   const [status, setStatus] = useState<AssetStatus | "Todos">("Todos");
   const [records, setRecords] = useState<FurRecord[] | null>(null);
+  const activePlant = useActivePlant();
 
   useEffect(() => {
     let active = true;
@@ -37,26 +39,29 @@ export function FurListPage({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [domains.join(",")]);
 
+  // Cambiar de planta en el header filtra esta vista sola: toda ficha FUR pertenece a una planta.
+  const plantRecords = useMemo(() => (records ? filterByPlant(records, activePlant) : null), [records, activePlant]);
+
   // Las 10 redes siempre se listan, aunque esta vista solo traiga fichas de algunas: el conteo real
   // de las demás es 0 aquí porque sus fichas viven en otra página (Procesos, Laboratorio, Requisiciones…).
   const countByDomain = useMemo(() => {
     const m = new Map<string, number>();
-    for (const r of records ?? []) m.set(r.domain, (m.get(r.domain) ?? 0) + 1);
+    for (const r of plantRecords ?? []) m.set(r.domain, (m.get(r.domain) ?? 0) + 1);
     return m;
-  }, [records]);
+  }, [plantRecords]);
   const countByStage = useMemo(() => {
     const m = new Map<string, number>();
-    for (const r of records ?? []) if (r.stage) m.set(r.stage, (m.get(r.stage) ?? 0) + 1);
+    for (const r of plantRecords ?? []) if (r.stage) m.set(r.stage, (m.get(r.stage) ?? 0) + 1);
     return m;
-  }, [records]);
+  }, [plantRecords]);
   const statuses = useMemo(
-    () => Array.from(new Set((records ?? []).map((r) => r.status))).sort() as AssetStatus[],
-    [records]
+    () => Array.from(new Set((plantRecords ?? []).map((r) => r.status))).sort() as AssetStatus[],
+    [plantRecords]
   );
 
   const filtered = useMemo(
     () =>
-      (records ?? []).filter((r) => {
+      (plantRecords ?? []).filter((r) => {
         const q = query.toLowerCase();
         const matchesQuery = !q || r.name.toLowerCase().includes(q) || r.furCode.toLowerCase().includes(q);
         const matchesDomain = !activeDomain || r.domain === activeDomain;
@@ -64,7 +69,7 @@ export function FurListPage({
         const matchesStatus = status === "Todos" || r.status === status;
         return matchesQuery && matchesDomain && matchesStage && matchesStatus;
       }),
-    [records, query, activeDomain, activeStage, status]
+    [plantRecords, query, activeDomain, activeStage, status]
   );
 
   return (
@@ -174,13 +179,13 @@ export function FurListPage({
         </aside>
 
         <div className="fur-list__results">
-          {records && (
+          {plantRecords && (
             <span className="fur-list__count">
-              {filtered.length} de {records.length} fichas FUR
+              {filtered.length} de {plantRecords.length} fichas FUR
             </span>
           )}
 
-          {!records ? (
+          {!plantRecords ? (
             <div className="fur-list__grid" aria-busy="true" aria-live="polite">
               {Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="fur-list__skeleton-card skeleton-block" />
@@ -188,8 +193,8 @@ export function FurListPage({
             </div>
           ) : filtered.length === 0 ? (
             <div className="panel fur-list__empty">
-              {records.length === 0
-                ? "La planta todavía no tiene fichas FUR registradas en esta red."
+              {plantRecords.length === 0
+                ? "Esta planta todavía no tiene fichas FUR registradas en esta red."
                 : "Ninguna ficha FUR cumple los filtros activos."}
             </div>
           ) : (

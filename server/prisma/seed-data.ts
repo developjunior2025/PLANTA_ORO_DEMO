@@ -9,11 +9,19 @@
 // Las fotos reales de cada activo no existen todavía (AS-BUILT pendiente); seed.ts asigna /placeholders/<red>.svg.
 const placeholderImg = (_seed: string) => "";
 
+// Plantas del ecosistema (megadocumento §4.2, filtro "planta"). PB02 es un sitio recién incorporado,
+// con pocas fichas cargadas todavía — a propósito, para que el filtro muestre una diferencia real.
+export const PLANTS = [
+  { code: "PB01", name: "Planta de Beneficio de Oro (REVMIN II)", location: "Zacate, Colombia" },
+  { code: "PB02", name: "Planta Cerro Alto", location: "Cerro Alto, Antioquia, Colombia" },
+];
+
 export const FUR_RECORDS = [
   {
     furCode: "FUR-PROC-00123",
     uuid: "a3f9c6e2-7b4e-4c2d-8f1e-9d2a7f1e0001",
     domain: "PROC",
+    plantCode: "PB01",
     name: "Molino de Bolas MB-01",
     family: "Equipo de proceso / Molienda",
     status: "Operativo",
@@ -67,6 +75,7 @@ export const FUR_RECORDS = [
     furCode: "FUR-PTE-PB01-TRF-0001",
     uuid: "b1c8d7f3-8c5f-5d3e-9f2f-ae3b8g2f1102",
     domain: "PTE",
+    plantCode: "PB01",
     name: "Transformador de Potencia 5 MVA",
     family: "Transformador / Potencia",
     status: "Operativo",
@@ -113,6 +122,7 @@ export const FUR_RECORDS = [
     furCode: "FUR-IOT-001045",
     uuid: "a31f9ce2-7b4e-4c2d-8f1e-9d2a71fe0001",
     domain: "IOT",
+    plantCode: "PB01",
     name: "Sensor de Presión PT-100",
     family: "Sensor de campo / Presión",
     status: "Operativo",
@@ -162,6 +172,7 @@ export const FUR_RECORDS = [
     furCode: "FUR-GPON-0231",
     uuid: "a8b1ff23d6-40c1-91ea-74bd8b120231",
     domain: "GPON",
+    plantCode: "PB01",
     name: "OLT Huawei MA5800",
     family: "Equipo de red GPON",
     status: "Operativo",
@@ -208,6 +219,7 @@ export const FUR_RECORDS = [
     furCode: "FUR-CC-A03-MP-001",
     uuid: "c2d9e814-3f6a-4b5c-8e21-7a1b9c3d4501",
     domain: "CC",
+    plantCode: "PB01",
     name: "Muestra Pulpa Molienda M-245",
     family: "Muestra física / Pulpa",
     status: "Operativo",
@@ -251,6 +263,7 @@ export const FUR_RECORDS = [
     furCode: "FUR-LAB-A12-AU-001",
     uuid: "d3e0f925-4a7b-5c6d-9f32-8b2c0d4e5602",
     domain: "LAB",
+    plantCode: "PB01",
     name: "Análisis de Oro por AAS",
     family: "Análisis / Ensayo químico",
     status: "Operativo",
@@ -292,6 +305,7 @@ export const FUR_RECORDS = [
     furCode: "FUR-MNT-A03-MB01-001",
     uuid: "e4f1a036-5b8c-6d7e-a043-9c3d1e5f6703",
     domain: "MNT",
+    plantCode: "PB01",
     name: "Plan de Mantenimiento Molino MB-01",
     family: "Estrategia / Plan preventivo",
     status: "Operativo",
@@ -335,6 +349,7 @@ export const FUR_RECORDS = [
     furCode: "FUR-RQ-PB01-RQ-01",
     uuid: "f502b147-6c9d-7e8f-b154-0d4e2f607804",
     domain: "RQ",
+    plantCode: "PB01",
     name: "Requisición Liners Molino MB-01",
     family: "Requisición / Repuesto crítico",
     status: "En proyecto",
@@ -375,6 +390,7 @@ export const FUR_RECORDS = [
     furCode: "FUR-OF-PB01-OF-01",
     uuid: "06139258-7dae-8f90-c265-1e5f30719a05",
     domain: "OF",
+    plantCode: "PB01",
     name: "Oferta Comercial Metso Perú — Liners MB-01",
     family: "Oferta / Cotización proveedor",
     status: "En proyecto",
@@ -414,6 +430,7 @@ export const FUR_RECORDS = [
     furCode: "FUR-CAM-SC01-CAM-01",
     uuid: "1724a369-8ebf-9001-d376-2f6041820b06",
     domain: "CAM",
+    plantCode: "PB01",
     name: "Cámara PTZ Molienda CAM-01",
     family: "Cámara / Seguridad",
     status: "Operativo",
@@ -454,8 +471,8 @@ export const FUR_RECORDS = [
 ];
 
 export const CATALOG_ENTITIES = [
-  { furCode: "FUR-ACT-000123", entityType: "Activos Físicos", domain: "PTE", zone: "06", title: "Bomba de Pulpa Warman 6/4", subtitle: "FUR-ACT-000123", meta: ["Área: Molienda", "Planta: REVMIN II"], status: "Operativo", image: placeholderImg("photo-1518709268805-4e9042af2176") },
-  { furCode: "FUR-PRO-000045", entityType: "Procesos", domain: "PROC", zone: "11", title: "Proceso de Lixiviación con Carbón Activado", subtitle: "FUR-PRO-000045", meta: ["Planta: REVMIN II"], status: "Operativo", image: placeholderImg("photo-1581093588401-fbb62a02f120") },
+  { furCode: "FUR-ACT-000123", entityType: "Activos Físicos", plantCode: "PB01", domain: "PTE", zone: "06", title: "Bomba de Pulpa Warman 6/4", subtitle: "FUR-ACT-000123", meta: ["Área: Molienda", "Planta: REVMIN II"], status: "Operativo", image: placeholderImg("photo-1518709268805-4e9042af2176") },
+  { furCode: "FUR-PRO-000045", entityType: "Procesos", plantCode: "PB01", domain: "PROC", zone: "11", title: "Proceso de Lixiviación con Carbón Activado", subtitle: "FUR-PRO-000045", meta: ["Planta: REVMIN II"], status: "Operativo", image: placeholderImg("photo-1581093588401-fbb62a02f120") },
   { furCode: "FUR-SER-000078", entityType: "Servicio", domain: null, title: "Servicio de Mantenimiento Predictivo", subtitle: "Proveedor: Tecnomin C.A.", meta: ["Desde USD 1,500"], status: "Disponible", image: placeholderImg("photo-1581091870621-1d6a5a3f0e6f"), price: "Desde USD 1,500", rating: 4.8 },
   { furCode: "FUR-CUR-000210", entityType: "Curso (LMS)", domain: null, title: "Operación de Planta de Beneficio de Oro", subtitle: "Proveedor: FUR Academy", meta: ["USD 49", "120 estudiantes"], status: "Disponible", image: placeholderImg("photo-1523240795612-9a054b0db644"), price: "USD 49", rating: 4.9 },
   { furCode: "FUR-DOC-000567", entityType: "Documento", domain: null, title: "Plano P&ID - Área de Molienda", subtitle: "Tipo: Plano / Formato: PDF", meta: ["v2.1", "12-09-2026"], status: "Certificado", image: placeholderImg("photo-1581092335878-02b3b2b2e7f2") },
@@ -618,7 +635,7 @@ export const LAB_SAMPLES_BY_STATUS = [
 
 /** Fichas referenciadas desde las relaciones de otras fichas (antes eran enlaces rotos). */
 function mkFur(p: {
-  furCode: string; uuid: string; domain: string; name: string; family: string;
+  furCode: string; uuid: string; plantCode: string; domain: string; name: string; family: string;
   criticality: string; maturity: string; dataQualityPercent: number;
   zone: string; stage?: string; area: string; process: string; manufacturer?: string; model?: string;
   technicalFields: { label: string; value: string; unit: string; condition: string; maturity: string }[];
@@ -642,7 +659,7 @@ function mkFur(p: {
 
 export const EXTRA_FUR_RECORDS = [
   mkFur({
-    furCode: "FUR-PROC-00050", uuid: "7a1c0d50-0050-4b1e-9c11-0000000000a1", domain: "PROC",
+    furCode: "FUR-PROC-00050", uuid: "7a1c0d50-0050-4b1e-9c11-0000000000a1", plantCode: "PB01", domain: "PROC",
     name: "Línea de Molienda", family: "Sistema / Línea de proceso", criticality: "Alta", maturity: "D3",
     dataQualityPercent: 68, zone: "03 - Molienda", stage: "06", area: "Molienda", process: "Conminución",
     technicalFields: [
@@ -658,7 +675,7 @@ export const EXTRA_FUR_RECORDS = [
     holds: [{ level: "TBC", description: "Validar diagrama de flujo (PFD) vigente de la línea" }],
   }),
   mkFur({
-    furCode: "FUR-PROC-00130", uuid: "7a1c0d50-0130-4b1e-9c11-0000000000a2", domain: "PROC",
+    furCode: "FUR-PROC-00130", uuid: "7a1c0d50-0130-4b1e-9c11-0000000000a2", plantCode: "PB01", domain: "PROC",
     name: "Clasificador (Hidrociclones)", family: "Equipo de proceso / Clasificación", criticality: "Media", maturity: "D2",
     dataQualityPercent: 52, zone: "03 - Molienda", stage: "08", area: "Molienda", process: "Clasificación",
     manufacturer: "Weir Minerals", model: "Cavex (por confirmar)",
@@ -673,7 +690,7 @@ export const EXTRA_FUR_RECORDS = [
     holds: [{ level: "TBC", description: "Confirmar número de ciclones y modelo" }, { level: "HOLD", description: "Levantar curva de partición real" }],
   }),
   mkFur({
-    furCode: "FUR-PROC-00131", uuid: "7a1c0d50-0131-4b1e-9c11-0000000000a3", domain: "PROC",
+    furCode: "FUR-PROC-00131", uuid: "7a1c0d50-0131-4b1e-9c11-0000000000a3", plantCode: "PB01", domain: "PROC",
     name: "Bomba de Descarga de Molino", family: "Equipo de proceso / Bombeo de pulpa", criticality: "Alta", maturity: "D2",
     dataQualityPercent: 55, zone: "03 - Molienda", stage: "05", area: "Molienda", process: "Impulsión",
     manufacturer: "Weir Minerals", model: "Warman 6/4 (por confirmar)",
@@ -688,7 +705,7 @@ export const EXTRA_FUR_RECORDS = [
     holds: [{ level: "TBC", description: "Confirmar curva de la bomba y punto de operación" }],
   }),
   mkFur({
-    furCode: "FUR-PTE-PB01-TAB-01", uuid: "7a1c0d50-0201-4b1e-9c11-0000000000a4", domain: "PTE",
+    furCode: "FUR-PTE-PB01-TAB-01", uuid: "7a1c0d50-0201-4b1e-9c11-0000000000a4", plantCode: "PB01", domain: "PTE",
     name: "Tablero Principal 4.16 kV", family: "Tablero / Distribución MT", criticality: "Alta", maturity: "D3",
     dataQualityPercent: 64, zone: "PB01 - Planta de Beneficio", area: "Eléctrica", process: "Distribución de Potencia",
     manufacturer: "ABB", model: "por confirmar",
@@ -703,7 +720,7 @@ export const EXTRA_FUR_RECORDS = [
     holds: [{ level: "HOLD", description: "Validar unifilar y ajustes de protecciones vigentes" }],
   }),
   mkFur({
-    furCode: "FUR-IOT-PB01-SEN-01", uuid: "7a1c0d50-0301-4b1e-9c11-0000000000a5", domain: "IOT",
+    furCode: "FUR-IOT-PB01-SEN-01", uuid: "7a1c0d50-0301-4b1e-9c11-0000000000a5", plantCode: "PB01", domain: "IOT",
     name: "Sensores de Temperatura y Carga TRF-01", family: "Sensor de campo / Temperatura", criticality: "Media", maturity: "D2",
     dataQualityPercent: 48, zone: "PB01 - Planta de Beneficio", area: "Eléctrica", process: "Monitoreo de condición",
     technicalFields: [
@@ -714,6 +731,37 @@ export const EXTRA_FUR_RECORDS = [
       { type: "Monitorea", target: "FUR-PTE-PB01-TRF-0001", targetLabel: "Transformador de Potencia 5 MVA", cardinality: "N:1", description: "Condición del transformador" },
     ],
     holds: [{ level: "TBC", description: "Confirmar TAGs, rangos y mapeo a SCADA" }],
+  }),
+  // Segunda planta (PB02): sitio más nuevo, con pocas fichas cargadas todavía — a propósito, para
+  // que el filtro por planta muestre una diferencia real (no una copia de PB01 con otro nombre).
+  mkFur({
+    furCode: "FUR-PTE-PB02-TRF-0001", uuid: "b2c1d0e5-1001-4f2a-8b3c-0000000000b1", plantCode: "PB02", domain: "PTE",
+    name: "Transformador de Potencia 3 MVA", family: "Equipo de potencia / Transformador", criticality: "Alta", maturity: "D2",
+    dataQualityPercent: 40, zone: "PB02 - Planta de Beneficio", area: "Eléctrica", process: "Distribución de Potencia",
+    manufacturer: "ABB", model: "por confirmar",
+    technicalFields: [
+      { label: "Potencia nominal", value: "3", unit: "MVA", condition: "REFERENCIAL", maturity: "D2" },
+      { label: "Puesta en marcha", value: "2026-07", unit: "", condition: "CONFIRMADO", maturity: "D3" },
+    ],
+    relations: [],
+    holds: [{ level: "TBC", description: "Cargar placa de datos completa y protocolo de pruebas" }],
+  }),
+  mkFur({
+    furCode: "FUR-PROC-PB02-00010", uuid: "b2c1d0e5-1002-4f2a-8b3c-0000000000b2", plantCode: "PB02", domain: "PROC",
+    name: "Línea de Molienda", family: "Sistema / Línea de proceso", criticality: "Media", maturity: "D1",
+    dataQualityPercent: 35, zone: "03 - Molienda", stage: "06", area: "Molienda", process: "Conminución",
+    technicalFields: [{ label: "Capacidad de diseño", value: "180", unit: "t/h", condition: "REFERENCIAL", maturity: "D2" }],
+    relations: [],
+    holds: [{ level: "TBC", description: "Levantar activos principales de la línea" }, { level: "HOLD", description: "Confirmar PFD de la planta" }],
+  }),
+  mkFur({
+    furCode: "FUR-IOT-PB02-SEN-01", uuid: "b2c1d0e5-1003-4f2a-8b3c-0000000000b3", plantCode: "PB02", domain: "IOT",
+    name: "Sensor de Presión de Pulpa PT-201", family: "Sensor de campo / Presión", criticality: "Media", maturity: "D1",
+    dataQualityPercent: 30, zone: "03 - Molienda", area: "Molienda", process: "Impulsión",
+    manufacturer: "Endress+Hauser",
+    technicalFields: [{ label: "Rango de medición", value: "0 - 10", unit: "bar", condition: "REFERENCIAL", maturity: "D2" }],
+    relations: [],
+    holds: [{ level: "TBC", description: "Confirmar protocolo de comunicación e integración a SCADA" }],
   }),
 ];
 

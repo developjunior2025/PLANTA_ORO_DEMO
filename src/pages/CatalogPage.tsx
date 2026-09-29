@@ -7,6 +7,7 @@ import { EntityCard } from "../components/ui/EntityCard";
 import { NetworkIcon } from "../components/ui/NetworkIcon";
 import { DOMAIN_LIST } from "../shared/domains";
 import { STAGES } from "../shared/stages";
+import { filterCatalogByPlant, useActivePlant } from "../shared/plantStore";
 import type { CatalogEntity, DomainCode } from "../shared/types";
 
 export function CatalogPage() {
@@ -47,6 +48,7 @@ function CatalogInner({
   const [status, setStatus] = useState("Todos");
   const [sort, setSort] = useState("relevancia");
   const [entities, setEntities] = useState<CatalogEntity[] | null>(null);
+  const activePlant = useActivePlant();
 
   useEffect(() => {
     let active = true;
@@ -56,20 +58,30 @@ function CatalogInner({
     };
   }, []);
 
-  const statuses = useMemo(() => ["Todos", ...Array.from(new Set((entities ?? []).map((e) => e.status))).sort()], [entities]);
+  // Cambiar de planta en el header filtra el catálogo solo: lo sin planta (proveedores, cursos,
+  // personas, servicios, redes...) se ve desde cualquier planta porque no es de un sitio en particular.
+  const plantScoped = useMemo(
+    () => (entities ? filterCatalogByPlant(entities, activePlant) : null),
+    [entities, activePlant]
+  );
+
+  const statuses = useMemo(
+    () => ["Todos", ...Array.from(new Set((plantScoped ?? []).map((e) => e.status))).sort()],
+    [plantScoped]
+  );
   const countByDomain = useMemo(() => {
     const m = new Map<string, number>();
-    for (const e of entities ?? []) if (e.domain) m.set(e.domain, (m.get(e.domain) ?? 0) + 1);
+    for (const e of plantScoped ?? []) if (e.domain) m.set(e.domain, (m.get(e.domain) ?? 0) + 1);
     return m;
-  }, [entities]);
+  }, [plantScoped]);
   const countByStage = useMemo(() => {
     const m = new Map<string, number>();
-    for (const e of entities ?? []) if (e.zone) m.set(e.zone, (m.get(e.zone) ?? 0) + 1);
+    for (const e of plantScoped ?? []) if (e.zone) m.set(e.zone, (m.get(e.zone) ?? 0) + 1);
     return m;
-  }, [entities]);
+  }, [plantScoped]);
 
   const results = useMemo(() => {
-    const filtered = (entities ?? []).filter((e) => {
+    const filtered = (plantScoped ?? []).filter((e) => {
       const q = query.toLowerCase();
       const matchesQuery =
         !q ||
@@ -88,7 +100,7 @@ function CatalogInner({
     if (sort === "nombre") return [...filtered].sort((a, b) => a.title.localeCompare(b.title, "es"));
     if (sort === "calificacion") return [...filtered].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
     return filtered;
-  }, [entities, query, activeTypes, activeDomain, activeStage, status, sort]);
+  }, [plantScoped, query, activeTypes, activeDomain, activeStage, status, sort]);
 
   return (
     <div className="catalog">
@@ -202,7 +214,7 @@ function CatalogInner({
           <div className="catalog-results">
             <div className="catalog-results__head">
               <span>
-                Mostrando {results.length} de {entities?.length ?? 0} resultados
+                Mostrando {results.length} de {plantScoped?.length ?? 0} resultados
               </span>
               <select value={sort} onChange={(e) => setSort(e.target.value)} aria-label="Ordenar por">
                 <option value="relevancia">Ordenar por: Relevancia</option>
@@ -211,7 +223,7 @@ function CatalogInner({
               </select>
             </div>
 
-            {!entities ? (
+            {!plantScoped ? (
               <div className="catalog-results__grid" aria-busy="true" aria-live="polite">
                 {Array.from({ length: 6 }).map((_, i) => (
                   <div key={i} className="catalog-skeleton-card skeleton-block" />

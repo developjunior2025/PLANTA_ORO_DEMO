@@ -31,7 +31,7 @@ export class KpisService {
     const [allFur, stock, budget, catalog, audit] = await Promise.all([
       this.prisma.furRecord.findMany({
         select: {
-          furCode: true, name: true, domain: true, area: true, zone: true, criticality: true,
+          furCode: true, name: true, domain: true, plantCode: true, area: true, zone: true, criticality: true,
           status: true, maturity: true, dataQualityPercent: true, holds: true, technicalFields: true,
         },
       }),

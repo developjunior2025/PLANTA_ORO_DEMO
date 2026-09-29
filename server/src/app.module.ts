@@ -8,6 +8,7 @@ import { DocumentsModule } from "./documents/documents.module";
 import { ChartsModule } from "./charts/charts.module";
 import { KpisModule } from "./kpis/kpis.module";
 import { DashboardsModule } from "./dashboards/dashboards.module";
+import { PlantsModule } from "./plants/plants.module";
 
 @Controller("api/v1/health")
 class HealthController {
@@ -28,6 +29,7 @@ class HealthController {
     ChartsModule,
     KpisModule,
     DashboardsModule,
+    PlantsModule,
   ],
   controllers: [HealthController],
 })

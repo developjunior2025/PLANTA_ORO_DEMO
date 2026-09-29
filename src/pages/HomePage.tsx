@@ -31,6 +31,7 @@ import { StatCard } from "../components/ui/StatCard";
 import { EntityCard } from "../components/ui/EntityCard";
 import { fetchCatalog, fetchChartSeries, fetchDocuments, fetchFurList, fetchStock } from "../shared/api";
 import { useAlerts } from "../shared/alerts";
+import { filterByPlant, filterCatalogByPlant, useActivePlant } from "../shared/plantStore";
 import type { CatalogEntity } from "../shared/types";
 
 interface ProductionPoint {
@@ -74,41 +75,57 @@ const SERVICES = [
   { icon: FileText, title: "Consultar Documentos", desc: "Manuales, planos, SOP", to: "/app/documentos" },
 ];
 
+interface RawHomeData {
+  catalog: CatalogEntity[];
+  fur: import("../shared/types").FurRecord[];
+  stockCount: number;
+  docsCount: number;
+}
+
 export function HomePage() {
-  const [offers, setOffers] = useState<CatalogEntity[] | null>(null);
+  const [raw, setRaw] = useState<RawHomeData | null>(null);
   const [trend, setTrend] = useState<ProductionPoint[] | null>(null);
-  const [counts, setCounts] = useState<Record<CountKey, number> | null>(null);
   const [search, setSearch] = useState("");
   const alerts = useAlerts();
   const navigate = useNavigate();
+  const activePlant = useActivePlant();
 
   useEffect(() => {
     let active = true;
     fetchChartSeries<ProductionPoint[]>("production_trend_24h").then((t) => active && setTrend(t));
     Promise.all([fetchCatalog(), fetchFurList(), fetchStock(), fetchDocuments()]).then(([catalog, fur, stock, docs]) => {
-      if (!active) return;
-      setOffers(catalog.slice(0, 4));
-      const byDomain = (d: string) => fur.filter((r) => r.domain === d).length;
-      const byType = (t: string) => catalog.filter((c) => c.entityType === t).length;
-      setCounts({
-        activos: fur.filter((r) => ["PTE", "IOT", "GPON", "MNT", "CAM"].includes(r.domain)).length,
-        procesos: byDomain("PROC"),
-        pte: byDomain("PTE"),
-        iot: byDomain("IOT"),
-        gpon: byDomain("GPON"),
-        lab: byDomain("CC") + byDomain("LAB"),
-        mnt: byDomain("MNT"),
-        stock: stock.length,
-        presupuestos: 1,
-        proveedores: byType("Proveedor"),
-        cursos: byType("Curso (LMS)"),
-        documentos: docs.length,
-      });
+      if (active) setRaw({ catalog, fur, stockCount: stock.length, docsCount: docs.length });
     });
     return () => {
       active = false;
     };
   }, []);
+
+  // La planta activa (selector del header) filtra los números de la portada. Stock y documentos
+  // todavía no tienen dimensión de planta propia en el modelo de datos, así que quedan sin filtrar.
+  const offers = raw ? filterCatalogByPlant(raw.catalog, activePlant).slice(0, 4) : null;
+  const counts: Record<CountKey, number> | null = raw
+    ? (() => {
+        const fur = filterByPlant(raw.fur, activePlant);
+        const catalog = filterCatalogByPlant(raw.catalog, activePlant);
+        const byDomain = (d: string) => fur.filter((r) => r.domain === d).length;
+        const byType = (t: string) => catalog.filter((c) => c.entityType === t).length;
+        return {
+          activos: fur.filter((r) => ["PTE", "IOT", "GPON", "MNT", "CAM"].includes(r.domain)).length,
+          procesos: byDomain("PROC"),
+          pte: byDomain("PTE"),
+          iot: byDomain("IOT"),
+          gpon: byDomain("GPON"),
+          lab: byDomain("CC") + byDomain("LAB"),
+          mnt: byDomain("MNT"),
+          stock: raw.stockCount,
+          presupuestos: 1,
+          proveedores: byType("Proveedor"),
+          cursos: byType("Curso (LMS)"),
+          documentos: raw.docsCount,
+        };
+      })()
+    : null;
 
   function goSearch(q: string) {
     navigate(q.trim() ? `/app/catalogo?q=${encodeURIComponent(q.trim())}` : "/app/catalogo");

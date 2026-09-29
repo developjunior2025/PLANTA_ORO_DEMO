@@ -21,6 +21,7 @@ import {
 import "./FurDetailPage.css";
 import { fetchFurByCode, fetchFurList, updateFur, fetchAuditEvents, ApiError, type AuditEvent } from "../shared/api";
 import { DOMAINS, DOMAIN_LIST } from "../shared/domains";
+import { usePlants } from "../shared/plantStore";
 import { NetworkIcon } from "../components/ui/NetworkIcon";
 import { StatusBadge, ConditionBadge, MaturityBadge, CriticalityBadge } from "../components/ui/Badges";
 import type { AssetStatus, Criticality, DataMaturity, FurHold, FurRecord } from "../shared/types";
@@ -49,6 +50,7 @@ function FurDetailInner({ furCode }: { furCode: string }) {
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [knownCodes, setKnownCodes] = useState<Set<string>>(new Set());
+  const plants = usePlants();
 
   useEffect(() => {
     let active = true;
@@ -72,6 +74,7 @@ function FurDetailInner({ furCode }: { furCode: string }) {
   }
 
   const domain = DOMAINS[record.domain];
+  const plantName = plants?.find((p) => p.code === record.plantCode)?.name ?? record.plantCode;
 
   function startEditing() {
     if (!record) return;
@@ -196,6 +199,10 @@ function FurDetailInner({ furCode }: { furCode: string }) {
             <MapPin size={14} /> Ubicación en la Planta
           </h4>
           <dl>
+            <div>
+              <dt>Planta</dt>
+              <dd>{record.plantCode} — {plantName}</dd>
+            </div>
             <div>
               <dt>Zona</dt>
               <dd>{record.zone}</dd>

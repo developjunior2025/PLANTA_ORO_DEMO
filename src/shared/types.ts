@@ -68,6 +68,8 @@ export interface FurHold {
 export interface FurRecord {
   furCode: string;
   uuid: string;
+  /** Planta/sitio al que pertenece la ficha (código de Plant, ej. "PB01"). */
+  plantCode: string;
   domain: DomainCode;
   name: string;
   family: string;
@@ -97,6 +99,8 @@ export interface FurRecord {
 export interface CatalogEntity {
   furCode: string;
   entityType: string;
+  /** Nula cuando la entidad no pertenece a una planta física (proveedor, curso, persona, servicio...). */
+  plantCode?: string | null;
   domain?: DomainCode;
   /** Etapa de la cadena productiva maestra (código "01".."18"), solo para activos/procesos. */
   zone?: string | null;

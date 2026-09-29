@@ -4,11 +4,13 @@ import { Loader2, PlusCircle } from "lucide-react";
 import "./CreateFurPage.css";
 import { createFur, ApiError } from "../shared/api";
 import { DOMAIN_LIST } from "../shared/domains";
+import { useActivePlant, usePlants } from "../shared/plantStore";
 import type { CreateFurInput } from "../shared/api";
 import type { DomainCode } from "../shared/types";
 
 const EMPTY: CreateFurInput = {
   furCode: "",
+  plantCode: "PB01",
   domain: "PROC",
   name: "",
   family: "",
@@ -24,8 +26,12 @@ const EMPTY: CreateFurInput = {
 export function CreateFurPage() {
   const [params] = useSearchParams();
   const presetDomain = params.get("domain")?.toUpperCase();
+  const activePlant = useActivePlant();
+  const plants = usePlants();
   const [form, setForm] = useState<CreateFurInput>(() => ({
     ...EMPTY,
+    // Se crea en la planta que se esté viendo ahora (selector del header); se puede cambiar antes de guardar.
+    plantCode: activePlant,
     domain: DOMAIN_LIST.some((d) => d.code === presetDomain) ? (presetDomain as DomainCode) : EMPTY.domain,
   }));
   const [saving, setSaving] = useState(false);
@@ -74,6 +80,14 @@ export function CreateFurPage() {
               value={form.furCode}
               onChange={(e) => set("furCode", e.target.value.toUpperCase())}
             />
+          </label>
+          <label>
+            Planta *
+            <select value={form.plantCode} onChange={(e) => set("plantCode", e.target.value)}>
+              {(plants ?? []).map((p) => (
+                <option key={p.code} value={p.code}>{p.code} — {p.name}</option>
+              ))}
+            </select>
           </label>
           <label>
             Red / Dominio *

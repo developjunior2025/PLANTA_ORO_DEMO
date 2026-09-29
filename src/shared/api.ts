@@ -25,6 +25,7 @@ export interface AuditEvent {
 
 export interface CreateFurInput {
   furCode: string;
+  plantCode?: string;
   domain: DomainCode;
   name: string;
   family: string;
@@ -119,6 +120,16 @@ export async function fetchCatalogEntity(furCode: string): Promise<CatalogEntity
 /** GET /api/v1/fur/:furCode/relations */
 export async function fetchFurRelations(furCode: string): Promise<FurRecord["relations"]> {
   return get<FurRecord["relations"]>(`/fur/${encodeURIComponent(furCode)}/relations`);
+}
+
+/** GET /api/v1/plants — plantas/sitios reales del ecosistema (megadocumento §4.2, filtro "planta"). */
+export interface Plant {
+  code: string;
+  name: string;
+  location: string;
+}
+export async function fetchPlants(): Promise<Plant[]> {
+  return get<Plant[]>("/plants");
 }
 
 /** GET /api/v1/inventory — mapea conceptualmente a stock.quant de Odoo 19 nativo */
