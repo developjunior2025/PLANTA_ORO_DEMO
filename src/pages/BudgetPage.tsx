@@ -1,8 +1,9 @@
 import { Fragment, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Calculator, ChevronDown, ChevronRight, FolderTree } from "lucide-react";
 import "./BudgetPage.css";
-import { fetchBudgetProject } from "../shared/api";
+import { fetchBudgetProject, fetchBudgetProjects } from "../shared/api";
+import { useActivePlant } from "../shared/plantStore";
 import {
   costoDirecto,
   precioUnitario,
@@ -18,18 +19,45 @@ function money(v: number, currency: string) {
 }
 
 export function BudgetPage() {
+  const { code } = useParams<{ code?: string }>();
+  const plantCode = useActivePlant();
   const [project, setProject] = useState<BudgetProject | null>(null);
+  const [notFoundForPlant, setNotFoundForPlant] = useState(false);
   const [openItem, setOpenItem] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
-    fetchBudgetProject().then((p) => {
-      if (active) setProject(p);
-    });
+
+    async function load() {
+      // Con código en la ruta (p.ej. desde Panel Planta): ese proyecto puntual.
+      if (code) {
+        const p = await fetchBudgetProject(code);
+        if (active) {
+          setProject(p);
+          setNotFoundForPlant(false);
+        }
+        return;
+      }
+      // Sin código: el primer proyecto de la planta activa (selector global del header).
+      const list = await fetchBudgetProjects(plantCode);
+      if (!active) return;
+      if (list.length === 0) {
+        setProject(null);
+        setNotFoundForPlant(true);
+        return;
+      }
+      const p = await fetchBudgetProject(list[0].code);
+      if (active) {
+        setProject(p);
+        setNotFoundForPlant(false);
+      }
+    }
+    load();
+
     return () => {
       active = false;
     };
-  }, []);
+  }, [code, plantCode]);
 
   return (
     <div className="budget container">
@@ -44,7 +72,12 @@ export function BudgetPage() {
         </p>
       </div>
 
-      {!project ? (
+      {notFoundForPlant ? (
+        <p className="dash-empty">
+          Esta planta todavía no tiene proyectos de presupuesto. Creá uno desde{" "}
+          <Link to="/app/planta" className="fur-table__link">Panel Planta</Link>.
+        </p>
+      ) : !project ? (
         <div className="skeleton-block" style={{ height: 320 }} aria-busy="true" />
       ) : (
         <>

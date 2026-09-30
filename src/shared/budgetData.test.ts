@@ -28,7 +28,13 @@ const item: BudgetItem = {
 };
 
 const chapter1: BudgetChapter = { code: "CAP-01", name: "Reposición de Liners", items: [item] };
-const project: BudgetProject = { code: "LW-PROY-001", name: "Proyecto de prueba", currency: "USD", chapters: [chapter1] };
+const project: BudgetProject = {
+  code: "LW-PROY-001",
+  plantCode: "PB01",
+  name: "Proyecto de prueba",
+  currency: "USD",
+  chapters: [chapter1],
+};
 
 describe("motor presupuestario tipo LuloWin", () => {
   it("calcula el costo directo como la suma de todos los recursos del APU", () => {

@@ -42,9 +42,18 @@ export interface BudgetChapter {
 
 export interface BudgetProject {
   code: string;
+  plantCode: string;
   name: string;
   currency: string;
   chapters: BudgetChapter[];
+}
+
+/** Forma liviana que devuelve el listado (sin capítulos/partidas). */
+export interface BudgetProjectSummary {
+  code: string;
+  plantCode: string;
+  name: string;
+  currency: string;
 }
 
 export function costoDirecto(item: BudgetItem): number {

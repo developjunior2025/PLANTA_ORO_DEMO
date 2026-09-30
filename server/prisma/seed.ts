@@ -103,6 +103,7 @@ async function main() {
       where: { sku: s.sku },
       create: {
         sku: s.sku,
+        plantCode: "PB01",
         name: s.name,
         category: s.category,
         warehouse: s.warehouse,
@@ -123,6 +124,7 @@ async function main() {
     await prisma.budgetProject.create({
       data: {
         code: BUDGET_PROJECT.code,
+        plantCode: "PB01",
         name: BUDGET_PROJECT.name,
         currency: BUDGET_PROJECT.currency,
         chapters: {

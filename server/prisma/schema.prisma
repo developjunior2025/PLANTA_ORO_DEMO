@@ -82,6 +82,7 @@ model CatalogEntity {
 model StockItem {
   id           String  @id @default(uuid())
   sku          String  @unique
+  plantCode    String
   name         String
   category     String
   warehouse    String
@@ -91,14 +92,19 @@ model StockItem {
   reorderPoint Float
   linkedFur    String?
   lastMovement String
+
+  @@index([plantCode])
 }
 
 model BudgetProject {
-  id       String          @id @default(uuid())
-  code     String          @unique
-  name     String
-  currency String
-  chapters BudgetChapter[]
+  id        String          @id @default(uuid())
+  code      String          @unique
+  plantCode String
+  name      String
+  currency  String
+  chapters  BudgetChapter[]
+
+  @@index([plantCode])
 }
 
 model BudgetChapter {

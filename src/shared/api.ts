@@ -7,7 +7,7 @@
  */
 import type { CatalogEntity, DomainCode, FurDocument, FurHold, FurRecord } from "./types";
 import type { StockItem } from "./wmsData";
-import type { BudgetProject } from "./budgetData";
+import type { BudgetProject, BudgetProjectSummary } from "./budgetData";
 
 export interface LibraryDocument extends FurDocument {
   furCode: string;
@@ -117,6 +117,34 @@ export async function fetchCatalogEntity(furCode: string): Promise<CatalogEntity
   }
 }
 
+export interface CreateCatalogEntityInput {
+  furCode: string;
+  entityType: string;
+  domain?: DomainCode;
+  plantCode?: string;
+  zone?: string;
+  title: string;
+  subtitle: string;
+  meta: string[];
+  status: string;
+  price?: string;
+  rating?: number;
+}
+export type UpdateCatalogEntityInput = Partial<Omit<CreateCatalogEntityInput, "furCode">>;
+
+/** POST /api/v1/catalog — crea una entidad del catálogo (Panel de Administración). */
+export async function createCatalogEntity(input: CreateCatalogEntityInput): Promise<CatalogEntity> {
+  return post<CatalogEntity>("/catalog", input);
+}
+/** PATCH /api/v1/catalog/:furCode */
+export async function updateCatalogEntity(furCode: string, input: UpdateCatalogEntityInput): Promise<CatalogEntity> {
+  return patch<CatalogEntity>(`/catalog/${encodeURIComponent(furCode)}`, input);
+}
+/** DELETE /api/v1/catalog/:furCode */
+export async function deleteCatalogEntity(furCode: string): Promise<void> {
+  await request(`/catalog/${encodeURIComponent(furCode)}`, { method: "DELETE" });
+}
+
 /** GET /api/v1/fur/:furCode/relations */
 export async function fetchFurRelations(furCode: string): Promise<FurRecord["relations"]> {
   return get<FurRecord["relations"]>(`/fur/${encodeURIComponent(furCode)}/relations`);
@@ -127,19 +155,78 @@ export interface Plant {
   code: string;
   name: string;
   location: string;
+  /** Presentes solo cuando responde el panel de Administración (cuenta real de fichas por planta). */
+  furCount?: number;
+  catalogCount?: number;
 }
 export async function fetchPlants(): Promise<Plant[]> {
   return get<Plant[]>("/plants");
 }
+export async function createPlant(input: { code: string; name: string; location: string }): Promise<Plant> {
+  return post<Plant>("/plants", input);
+}
+export async function updatePlant(code: string, input: { name: string; location: string }): Promise<Plant> {
+  return patch<Plant>(`/plants/${encodeURIComponent(code)}`, input);
+}
+export async function deletePlant(code: string): Promise<void> {
+  await request(`/plants/${encodeURIComponent(code)}`, { method: "DELETE" });
+}
 
-/** GET /api/v1/inventory — mapea conceptualmente a stock.quant de Odoo 19 nativo */
-export async function fetchStock(): Promise<StockItem[]> {
-  return get<StockItem[]>("/inventory");
+/** GET /api/v1/inventory?plantCode= — mapea conceptualmente a stock.quant de Odoo 19 nativo */
+export async function fetchStock(plantCode?: string): Promise<StockItem[]> {
+  return get<StockItem[]>(`/inventory${plantCode ? `?plantCode=${encodeURIComponent(plantCode)}` : ""}`);
+}
+
+export interface CreateStockItemInput {
+  sku: string;
+  plantCode: string;
+  name: string;
+  category: string;
+  warehouse: string;
+  location: string;
+  qty: number;
+  uom: string;
+  reorderPoint: number;
+  linkedFur?: string;
+}
+export type UpdateStockItemInput = Partial<Omit<CreateStockItemInput, "sku" | "plantCode" | "qty">>;
+
+/** POST /api/v1/inventory — crea un ítem de inventario real (Panel Planta). */
+export async function createStockItem(input: CreateStockItemInput): Promise<StockItem> {
+  return post<StockItem>("/inventory", input);
+}
+/** PATCH /api/v1/inventory/:sku — edita los datos base del ítem (no la cantidad; eso es un movimiento). */
+export async function updateStockItem(sku: string, input: UpdateStockItemInput): Promise<StockItem> {
+  return patch<StockItem>(`/inventory/${encodeURIComponent(sku)}`, input);
+}
+/** DELETE /api/v1/inventory/:sku */
+export async function deleteStockItem(sku: string): Promise<void> {
+  await request(`/inventory/${encodeURIComponent(sku)}`, { method: "DELETE" });
+}
+
+/** GET /api/v1/lulo/projects?plantCode= — listado liviano de proyectos de presupuesto */
+export async function fetchBudgetProjects(plantCode?: string): Promise<BudgetProjectSummary[]> {
+  return get<BudgetProjectSummary[]>(`/lulo/projects${plantCode ? `?plantCode=${encodeURIComponent(plantCode)}` : ""}`);
 }
 
 /** GET /api/v1/lulo/projects/:code — motor presupuestario tipo LuloWin (§10/§14) */
 export async function fetchBudgetProject(code = "LW-PROY-001"): Promise<BudgetProject> {
   return get<BudgetProject>(`/lulo/projects/${encodeURIComponent(code)}`);
+}
+
+export interface CreateBudgetProjectInput {
+  code: string;
+  plantCode: string;
+  name: string;
+  currency: string;
+}
+/** POST /api/v1/lulo/projects — crea un proyecto de presupuesto real (Panel Planta). */
+export async function createBudgetProject(input: CreateBudgetProjectInput): Promise<BudgetProjectSummary> {
+  return post<BudgetProjectSummary>("/lulo/projects", input);
+}
+/** DELETE /api/v1/lulo/projects/:code — borra el proyecto y en cascada sus capítulos/partidas/recursos. */
+export async function deleteBudgetProject(code: string): Promise<void> {
+  await request(`/lulo/projects/${encodeURIComponent(code)}`, { method: "DELETE" });
 }
 
 /** GET /api/v1/documents — biblioteca técnica (Etapa 13.5), agregada desde cada FUR */
@@ -196,6 +283,21 @@ export async function fetchKpis(): Promise<KpisResponse> {
 /** GET /api/v1/audit?limit= — eventos de auditoría recientes de todo el sistema */
 export async function fetchAuditFeed(limit = 8): Promise<AuditEvent[]> {
   return get<AuditEvent[]>(`/audit?limit=${limit}`);
+}
+
+/** GET /api/v1/audit/search — feed filtrable del Panel de Administración. */
+export interface AuditSearchParams {
+  type?: string;
+  from?: string;
+  to?: string;
+  q?: string;
+  limit?: number;
+}
+export async function searchAudit(params: AuditSearchParams): Promise<{ rows: AuditEvent[]; eventTypes: string[] }> {
+  const qs = new URLSearchParams();
+  for (const [k, v] of Object.entries(params)) if (v) qs.set(k, String(v));
+  const s = qs.toString();
+  return get(`/audit/search${s ? `?${s}` : ""}`);
 }
 
 // ---------- Dashboards (documento maestro de dashboards §11, §12, §14) ----------

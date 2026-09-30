@@ -19,6 +19,7 @@ const BudgetPage = lazy(() => import("./pages/BudgetPage").then((m) => ({ defaul
 const DocumentsPage = lazy(() => import("./pages/DocumentsPage").then((m) => ({ default: m.DocumentsPage })));
 const MapPage = lazy(() => import("./pages/MapPage").then((m) => ({ default: m.MapPage })));
 const AdminPage = lazy(() => import("./pages/AdminPage").then((m) => ({ default: m.AdminPage })));
+const PlantaPage = lazy(() => import("./pages/PlantaPage").then((m) => ({ default: m.PlantaPage })));
 const EntityDetailPage = lazy(() => import("./pages/EntityDetailPage").then((m) => ({ default: m.EntityDetailPage })));
 const FavoritesPage = lazy(() => import("./pages/FavoritesPage").then((m) => ({ default: m.FavoritesPage })));
 const AlertsPage = lazy(() => import("./pages/AlertsPage").then((m) => ({ default: m.AlertsPage })));
@@ -115,6 +116,7 @@ function App() {
               }
             />
             <Route path="presupuestos" element={<BudgetPage />} />
+            <Route path="presupuestos/:code" element={<BudgetPage />} />
             <Route path="documentos" element={<DocumentsPage />} />
             <Route path="dashboard" element={<DashboardRedirect />} />
             <Route path="dashboards" element={<DashboardsLayout />}>
@@ -123,6 +125,7 @@ function App() {
             </Route>
             <Route path="mapas" element={<MapPage />} />
             <Route path="admin" element={<AdminPage />} />
+            <Route path="planta" element={<PlantaPage />} />
             <Route
               path="marketplace"
               element={

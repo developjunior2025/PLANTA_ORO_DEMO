@@ -41,6 +41,12 @@ const SECTIONS = [
       { label: "Servicios Profesionales", to: "/app/profesionales" },
       { label: "Cursos (LMS)", to: "/app/cursos" },
       { label: "Documentos", to: "/app/documentos" },
+    ],
+  },
+  {
+    title: "Gestión",
+    links: [
+      { label: "Panel Planta", to: "/app/planta" },
       { label: "Administración", to: "/app/admin" },
     ],
   },

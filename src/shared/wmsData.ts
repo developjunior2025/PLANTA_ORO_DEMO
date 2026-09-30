@@ -6,6 +6,7 @@
  */
 export interface StockItem {
   sku: string;
+  plantCode: string;
   name: string;
   category: string;
   warehouse: string;

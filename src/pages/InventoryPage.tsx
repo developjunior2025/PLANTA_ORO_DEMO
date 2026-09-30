@@ -5,21 +5,23 @@ import "./InventoryPage.css";
 import { fetchStock, registerStockMovement, ApiError } from "../shared/api";
 import { StatCard } from "../components/ui/StatCard";
 import type { StockItem } from "../shared/wmsData";
+import { useActivePlant } from "../shared/plantStore";
 
 export function InventoryPage() {
+  const plantCode = useActivePlant();
   const [items, setItems] = useState<StockItem[] | null>(null);
   const [query, setQuery] = useState("");
   const [movementSku, setMovementSku] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
-    fetchStock().then((r) => {
+    fetchStock(plantCode).then((r) => {
       if (active) setItems(r);
     });
     return () => {
       active = false;
     };
-  }, []);
+  }, [plantCode]);
 
   const belowReorder = useMemo(() => (items ?? []).filter((i) => i.qty < i.reorderPoint), [items]);
   const warehouses = useMemo(() => new Set((items ?? []).map((i) => i.warehouse)).size, [items]);
